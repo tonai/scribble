@@ -1,8 +1,23 @@
 <script setup lang="ts">
 import { onMounted } from "vue"
-import { drauu, drawingPayer, dump, playerId } from "../store"
+import {
+  countDown,
+  drauu,
+  drawingPayer,
+  dump,
+  mode,
+  playerId,
+  scores,
+  words,
+} from "../store"
+import { Mode } from "../types/logic"
+import Choose from "./Choose.vue"
+import CountDown from "./CountDown.vue"
 import Draw from "./Draw.vue"
 import DrawControls from "./DrawControls.vue"
+import Guess from "./Guess.vue"
+import Scores from "./Scores.vue"
+import StartScreen from "./StartScreen.vue"
 
 onMounted(() => {
   Dusk.initClient({
@@ -10,14 +25,25 @@ onMounted(() => {
       if (yourPlayerId && playerId.value !== yourPlayerId) {
         playerId.value = yourPlayerId
       }
-      if (game.drawingPayer && drawingPayer.value !== game.drawingPayer) {
+      if (drawingPayer.value !== game.drawingPayer) {
         drawingPayer.value = game.drawingPayer
       }
-      if (
-        game.dump &&
-        game.drawingPayer !== yourPlayerId &&
-        dump.value !== game.dump
-      ) {
+      if (countDown.value !== game.countDown) {
+        countDown.value = game.countDown
+      }
+      if (mode.value !== game.mode) {
+        mode.value = game.mode
+      }
+      if (game.drawingPayer === yourPlayerId && words.value !== game.words) {
+        words.value = game.words
+      }
+      scores.value = Object.fromEntries(
+        Object.entries(game.scores)
+          .filter(([id]) => game.playerIds.indexOf(id) !== -1)
+          .sort(([_a, a], [_b, b]) => b - a)
+          .map(([id, total]) => [id, { score: game.playersGuessed[id], total }])
+      )
+      if (game.drawingPayer !== yourPlayerId && dump.value !== game.dump) {
         dump.value = game.dump
         if (drauu.value) {
           drauu.value.load(game.dump)
@@ -29,9 +55,14 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="container">
-    <DrawControls v-if="drawingPayer === playerId" />
+  <StartScreen v-if="mode === Mode.WAIT" />
+  <div v-else class="container">
     <Draw />
+    <CountDown />
+    <DrawControls v-if="drawingPayer === playerId" />
+    <Choose v-if="drawingPayer === playerId && mode === Mode.CHOOSE" />
+    <Guess v-if="drawingPayer !== playerId && mode === Mode.PLAY" />
+    <Scores v-if="mode === Mode.SCORES" />
   </div>
 </template>
 
