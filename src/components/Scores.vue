@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { t } from '../helpers/i18n';
 import { scores } from '../store';
 
 function ready() {
@@ -14,5 +15,5 @@ function ready() {
       <td>{{ score.total }}</td>
     </tr>
   </table>
-  <button type="button" @click="ready">Ready</button>
+  <button type="button" @click="ready">{{ t('Ready') }}</button>
 </template>

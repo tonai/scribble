@@ -1,7 +1,20 @@
 import { formatter, rounds, startCountDown } from "../constants/game"
 import { words } from "../constants/words"
 import { randomInt } from "../helpers/math"
-import { GameState, Mode } from "../types/logic"
+import { GameState, Language, Mode } from "../types/logic"
+
+export function selectLanguage(game: GameState) {
+  const groupedVotes = Object.values(game.playersLanguage).reduce((acc, vote) => {
+    acc[vote] = (acc[vote] ?? 0) + 1;
+    return acc;
+  }, {} as Record<Language, number>);
+  const max = Math.max(...Object.values(groupedVotes));
+  const maxVotes = Object.entries(groupedVotes).filter(
+    ([_, number]) => number === max
+  ) as [Language, number][];
+  const index = randomInt(0, maxVotes.length - 1);
+  game.language = maxVotes[index][0];
+}
 
 export function selectWord(game: GameState) {
   game.mode = Mode.CHOOSE
@@ -9,7 +22,7 @@ export function selectWord(game: GameState) {
   game.drawingPayer =
     players[(players.indexOf(game.drawingPayer) + 1) % players.length]
   game.countDown = formatter.format(startCountDown)
-  game.words = Object.values(words.en).map((words) => {
+  game.words = Object.values(words[game.language ?? 'en']).map((words) => {
     const index = randomInt(words.length - 1)
     return words[index]
   })

@@ -5,6 +5,7 @@ import {
   drauu,
   drawingPayer,
   dump,
+  language,
   mode,
   playerId,
   scores,
@@ -30,6 +31,9 @@ onMounted(() => {
       }
       if (countDown.value !== game.countDown) {
         countDown.value = game.countDown
+      }
+      if (language.value !== game.language) {
+        language.value = game.language
       }
       if (mode.value !== game.mode) {
         mode.value = game.mode

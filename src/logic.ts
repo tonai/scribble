@@ -1,8 +1,8 @@
 import { formatter, startCountDown } from "./constants/game"
 import { words } from "./constants/words"
 import { getScore } from "./helpers/game"
-import { endRound, selectWord, startRound } from "./logic/round"
-import { Mode } from "./types/logic"
+import { endRound, selectLanguage, selectWord, startRound } from "./logic/round"
+import { Language, Mode } from "./types/logic"
 
 Dusk.initLogic({
   minPlayers: 1,
@@ -14,9 +14,11 @@ Dusk.initLogic({
     drawingPayer: allPlayerIds[0],
     dump: "",
     guessWord: "",
+    language: null,
     mode: Mode.WAIT,
     playerIds: allPlayerIds,
     playersGuessed: {},
+    playersLanguage: {},
     playersReady: [],
     rounds: Object.fromEntries(allPlayerIds.map((id) => [id, 0])),
     scores: Object.fromEntries(allPlayerIds.map((id) => [id, 0])),
@@ -24,32 +26,58 @@ Dusk.initLogic({
     words: [],
   }),
   actions: {
+    choose(word, { game, playerId }) {
+      if (game.mode !== Mode.CHOOSE || playerId !== game.drawingPayer || game.words.indexOf(word) === -1) {
+        return Dusk.invalidAction()
+      }
+      // Remove the chosen word from the list to have it multiple times
+      for (let list of Object.values(words[game.language ?? 'en'])) {
+        const index = list.indexOf(word)
+        if (index !== -1) {
+          list.splice(index, 1)
+        }
+      }
+      game.guessWord = word
+      startRound(game)
+    },
     draw(dump: string, { game, playerId }) {
-      if (playerId !== game.drawingPayer) {
+      if (game.mode !== Mode.PLAY || playerId !== game.drawingPayer) {
         return Dusk.invalidAction()
       }
       game.dump = dump
     },
     guess(word: string, { game, playerId }) {
-      if (
-        game.mode !== Mode.PLAY ||
-        playerId in game.playersGuessed
-      ) {
+      if (game.mode !== Mode.PLAY || playerId in game.playersGuessed) {
         return Dusk.invalidAction()
       }
       if (word.toLowerCase() === game.guessWord.toLowerCase()) {
         // console.log(playerId, 'guessed the word')
         const time = startCountDown * 1000 - (Dusk.gameTime() - game.startTime)
         const score = getScore(time)
-        game.playersGuessed[playerId] = score;
+        game.playersGuessed[playerId] = score
         game.scores[playerId] += score
-        if (Object.keys(game.playersGuessed).length === game.playerIds.length - 1) {
+        if (
+          Object.keys(game.playersGuessed).length ===
+          game.playerIds.length - 1
+        ) {
           endRound(game)
         }
       }
     },
+    language(language: Language, { game, playerId }) {
+      if (game.mode !== Mode.WAIT) {
+        return Dusk.invalidAction()
+      }
+      game.playersLanguage[playerId] = language
+      if (Object.keys(game.playersLanguage).length === game.playerIds.length) {
+        selectLanguage(game);
+      }
+    },
     ready(_, { game, playerId }) {
-      if (game.playersReady.indexOf(playerId) !== -1) {
+      if (
+        (game.mode !== Mode.WAIT && game.mode !== Mode.SCORES) ||
+        game.playersReady.indexOf(playerId) !== -1
+      ) {
         return Dusk.invalidAction()
       }
       game.playersReady.push(playerId)
@@ -57,26 +85,12 @@ Dusk.initLogic({
         selectWord(game)
       }
     },
-    choose(word, { game, playerId }) {
-      if (playerId !== game.drawingPayer || game.words.indexOf(word) === -1) {
-        return Dusk.invalidAction()
-      }
-      // Remove the chosen word from the list to have it multiple times
-      for (let list of Object.values(words.en)) {
-        const index = list.indexOf(word);
-        if (index !== -1) {
-          list.splice(index, 1);
-        }
-      }
-      game.guessWord = word
-      startRound(game)
-    },
   },
   events: {
     playerJoined(playerId, { game }) {
       game.playerIds.push(playerId)
       game.scores[playerId] = 0
-      game.rounds[playerId] = Math.min(...Object.values(game.rounds));
+      game.rounds[playerId] = Math.min(...Object.values(game.rounds))
     },
     playerLeft(playerId, { game }) {
       game.playerIds.splice(game.playerIds.indexOf(playerId), 1)
