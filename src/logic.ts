@@ -2,17 +2,17 @@ import { formatter, startCountDown } from "./constants/game"
 import { words } from "./constants/words"
 import { getScore } from "./helpers/game"
 import { endRound, selectLanguage, selectWord, startRound } from "./logic/round"
-import { Language, Mode } from "./types/logic"
+import { Action, DiffAction, Language, Mode } from "./types/logic"
 
 Dusk.initLogic({
   minPlayers: 1,
   maxPlayers: 6,
-  reactive: true,
+  reactive: false,
   updatesPerSecond: 10,
   setup: (allPlayerIds) => ({
     countDown: formatter.format(startCountDown),
     drawingPayer: allPlayerIds[0],
-    dump: "",
+    dump: [],
     guessWord: "",
     language: null,
     mode: Mode.WAIT,
@@ -40,11 +40,24 @@ Dusk.initLogic({
       game.guessWord = word
       startRound(game)
     },
-    draw(dump: string, { game, playerId }) {
+    draw(diff: DiffAction[], { game, playerId }) {
       if (game.mode !== Mode.PLAY || playerId !== game.drawingPayer) {
         return Dusk.invalidAction()
       }
-      game.dump = dump
+      for (const [action, index, dump] of diff) {
+        switch (action) {
+          case Action.CLEAR:
+            game.dump = [];
+            break;
+          case Action.DELETE:
+            game.dump[index] = '';
+            break;
+          case Action.ADD:
+            game.dump[index] = dump;
+            break;
+        }
+      }
+      game.dump = game.dump.filter(x => x);
     },
     guess(word: string, { game, playerId }) {
       if (game.mode !== Mode.PLAY || playerId in game.playersGuessed) {
@@ -95,7 +108,7 @@ Dusk.initLogic({
     playerLeft(playerId, { game }) {
       game.playerIds.splice(game.playerIds.indexOf(playerId), 1)
       game.playersReady.splice(game.playersReady.indexOf(playerId), 1)
-      if (playerId === game.drawingPayer) {
+      if (game.mode === Mode.PLAY && playerId === game.drawingPayer) {
         endRound(game)
       }
     },

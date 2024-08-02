@@ -17,10 +17,18 @@ export interface LanguageWords {
 
 export type Words = Record<Language, LanguageWords>
 
+export enum Action {
+  CLEAR,
+  ADD,
+  DELETE,
+}
+
+export type DiffAction = [Action.CLEAR] | [Action.ADD, number, string] | [Action.DELETE, number]
+
 export interface GameState {
   countDown: string
   drawingPayer: PlayerId
-  dump: string
+  dump: string[]
   guessWord: string
   language: Language | null
   mode: Mode
@@ -36,7 +44,7 @@ export interface GameState {
 
 export type GameActions = {
   choose: (word: string) => void
-  draw: (dump: string) => void
+  draw: (diff: DiffAction[]) => void
   guess: (word: string) => void
   language: (language: Language) => void
   ready: () => void

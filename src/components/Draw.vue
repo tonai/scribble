@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref, watch, watchEffect } from "vue"
+import { onMounted, onUnmounted, ref, watch } from "vue"
 import { createDrauu } from "drauu"
-import { drauu, mode } from "../store"
+import { drauu, drawingPayer, mode, playerId } from "../store"
+import { getDiff } from "../helpers/draw"
 import { Mode } from "../types/logic"
 
 const svg = ref<SVGSVGElement>()
 const interval = ref<number>()
-const lastDump = ref<string>()
+const lastDump = ref<string[]>([])
 
 onMounted(() => {
   const drauuInstance = createDrauu({
@@ -20,10 +21,13 @@ onMounted(() => {
   drauu.value = drauuInstance
 
   interval.value = setInterval(() => {
-    const dump = drauuInstance.dump()
-    if (dump !== lastDump.value) {
-      lastDump.value = dump
-      Dusk.actions.draw(dump)
+    if (svg.value && drauu.value) {
+      const dump = [...svg.value.children].map((node) => node.outerHTML)
+      const diff = getDiff(lastDump.value, dump)
+      if (diff.length > 0) {
+        Dusk.actions.draw(diff)
+        lastDump.value = dump
+      }
     }
   }, 1000 / 8)
 })
@@ -34,7 +38,7 @@ onUnmounted(() => {
 
 watch(mode, () => {
   if (mode.value === Mode.CHOOSE && drauu.value) {
-    drauu.value.clear();
+    drauu.value.clear()
   }
 })
 </script>
@@ -43,7 +47,10 @@ watch(mode, () => {
   <svg
     ref="svg"
     class="svg"
-    :class="{ disabled: mode !== Mode.PLAY, enabled: mode === Mode.PLAY }"
+    :class="{
+      disabled: mode !== Mode.PLAY || drawingPayer !== playerId,
+      enabled: mode === Mode.PLAY && drawingPayer === playerId,
+    }"
   ></svg>
 </template>
 

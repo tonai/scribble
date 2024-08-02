@@ -47,10 +47,11 @@ onMounted(() => {
           .sort(([_a, a], [_b, b]) => b - a)
           .map(([id, total]) => [id, { score: game.playersGuessed[id], total }])
       )
-      if (game.drawingPayer !== yourPlayerId && dump.value !== game.dump) {
-        dump.value = game.dump
+      const gameDump = game.dump.join();
+      if (game.drawingPayer !== yourPlayerId && dump.value !== gameDump) {
+        dump.value = gameDump
         if (drauu.value) {
-          drauu.value.load(game.dump)
+          drauu.value.load(gameDump)
         }
       }
     },

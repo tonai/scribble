@@ -27,7 +27,7 @@ export function selectWord(game: GameState) {
     return words[index]
   })
   game.playersGuessed = {}
-  game.dump = ""
+  game.dump = []
 }
 
 export function startRound(game: GameState) {
