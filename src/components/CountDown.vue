@@ -5,12 +5,3 @@ import { countDown } from '../store';
 <template>
   <div class="countdown">{{ countDown }}</div>
 </template>
-
-<style scoped>
-.countdown {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  translate: -50% 0;
-}
-</style>

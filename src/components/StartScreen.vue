@@ -64,7 +64,7 @@ function ready() {
   </div>
   <div class="modes">
     <!-- <button v-if="language" class="mode button" type="button" @click="ready">
-      {{ t("Free mode") }}
+      <span>{{ t("Free mode") }}</span>
     </button> -->
     <button
       v-if="language"
@@ -73,7 +73,7 @@ function ready() {
       type="button"
       @click="ready"
     >
-      {{ t("Guess mode") }} ({{ playersReady.length }}/{{ playerIds.length }})
+      <span>{{ t("Guess mode") }} ({{ playersReady.length }}/{{ playerIds.length }})</span>
     </button>
   </div>
 </template>
@@ -88,7 +88,6 @@ function ready() {
   display: flex;
   flex-direction: column;
   padding: 0 5vw 0 0;
-  flex: 1;
 }
 .language {
   display: flex;
@@ -123,6 +122,7 @@ function ready() {
   align-items: center;
   justify-content: space-between;
   gap: 6vw;
+  margin: auto 0;
 }
 .mode {
   flex: 1;

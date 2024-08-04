@@ -14,6 +14,7 @@ Dusk.initLogic({
     drawingPayer: allPlayerIds[0],
     dump: [],
     guessWord: "",
+    hint: [],
     language: null,
     mode: Mode.WAIT,
     playerIds: allPlayerIds,

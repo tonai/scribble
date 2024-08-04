@@ -9,13 +9,15 @@ const svg = ref<SVGSVGElement>()
 const interval = ref<number>()
 const lastDump = ref<string[]>([])
 
+onMounted(() => {})
+
 onMounted(() => {
   const drauuInstance = createDrauu({
     el: svg.value,
     brush: {
-      mode: "stylus",
+      mode: "draw",
       color: "black",
-      size: 3,
+      size: 5,
     },
   })
   drauu.value = drauuInstance
@@ -41,22 +43,49 @@ watch(mode, () => {
     drauu.value.clear()
   }
 })
+
+function resize() {
+  console.log("resize")
+}
 </script>
 
 <template>
-  <svg
-    ref="svg"
-    class="svg"
-    :class="{
-      disabled: mode !== Mode.PLAY || drawingPayer !== playerId,
-      enabled: mode === Mode.PLAY && drawingPayer === playerId,
-    }"
-  ></svg>
+  <div class="draw">
+    <div class="container">
+      <svg
+        ref="svg"
+        class="svg"
+        :class="{
+          disabled: mode !== Mode.PLAY || drawingPayer !== playerId,
+          enabled: mode === Mode.PLAY && drawingPayer === playerId,
+        }"
+        viewBox="0 0 300 400"
+      ></svg>
+    </div>
+  </div>
 </template>
 
 <style scoped>
-.svg {
+.draw {
   flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: -0.5vh 0;
+  position: relative;
+}
+.container {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.svg {
+  aspect-ratio: 3/4;
+  background-color: white;
+  max-width: 100%;
+  max-height: 100%;
 }
 .enabled {
   touch-action: none;

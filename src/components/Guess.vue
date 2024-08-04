@@ -11,8 +11,39 @@ function submit(event: Event) {
 </script>
 
 <template>
-  <form @submit="submit">
-    <input v-model="guess" />
-    <input type="submit" value="Guess" />
+  <form class="form" @submit="submit">
+    <input class="input button" v-model="guess" />
+    <input class="submit button" type="submit" value="Guess" />
   </form>
 </template>
+
+<style scoped>
+.form {
+  padding: 2vh 0 1vh;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5vw;
+  position: relative;
+  font-size: 4vw;
+}
+.form:before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  top: 0.5vh;
+  background-color: white;
+}
+.form:after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  background: center top url(/line.png) repeat-x;
+  height: 6px;
+}
+.form > * {
+  position: relative;
+}
+</style>

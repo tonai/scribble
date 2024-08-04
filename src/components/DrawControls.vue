@@ -3,7 +3,7 @@ import { ref } from "vue"
 import { DrawingMode } from "drauu"
 import { drauu } from "../store"
 
-const activeBrush = ref<DrawingMode>("stylus")
+const activeBrush = ref<DrawingMode>("draw")
 const activeColor = ref<string>("#000000")
 const activeSize = ref<number>(3)
 
@@ -34,8 +34,7 @@ function color(color: string) {
   }
 }
 
-function size(event: Event) {
-  const size = Number((event.target as HTMLInputElement).value)
+function size(size: number) {
   activeSize.value = size
   if (drauu.value) {
     drauu.value.brush.size = size
@@ -44,146 +43,361 @@ function size(event: Event) {
 </script>
 
 <template>
-  <div>
-    <button aria-label="Undo" title="Undo" @click="undo">↩️</button>
-    <button aria-label="Redo" title="Redo" @click="redo">↪️</button>
-    <button aria-label="Clear" title="Clear" @click="clear">🗑</button>
-    <button
-      :class="{ active: activeBrush === 'stylus' }"
-      aria-label="Stylus"
-      title="Stylus"
-      @click="brush('stylus')"
-    >
-      ✍️
-    </button>
-    <button
-      :class="{ active: activeBrush === 'draw' }"
-      aria-label="Draw"
-      title="Draw"
-      @click="brush('draw')"
-    >
-      ✏️
-    </button>
-    <button
-      :class="{ active: activeBrush === 'line' }"
-      aria-label="Line"
-      title="Line"
-      @click="brush('line')"
-    >
-      ⁄
-    </button>
-    <button
-      :class="{ active: activeBrush === 'line' }"
-      aria-label="Arrow"
-      title="Arrow"
-      @click="brush('line', true)"
-    >
-      ↗
-    </button>
-    <button
-      :class="{ active: activeBrush === 'rectangle' }"
-      aria-label="Rect"
-      title="Rect"
-      @click="brush('rectangle')"
-    >
-      □
-    </button>
-    <button
-      :class="{ active: activeBrush === 'ellipse' }"
-      aria-label="Ellipse"
-      title="Ellipse"
-      @click="brush('ellipse')"
-    >
-      ○
-    </button>
-    <button
-      :class="{ active: activeBrush === 'eraseLine' }"
-      aria-label="Eraser"
-      title="Eraser"
-      @click="brush('eraseLine')"
-    >
-      🧹
-    </button>
-    <button
-      :class="{ active: activeColor === '#000000' }"
-      aria-label="Black"
-      title="Black"
-      @click="color('#000000')"
-    >
-      ​⚫️​
-    </button>
-    <button
-      :class="{ active: activeColor === '#ed153d' }"
-      aria-label="Red"
-      title="Red"
-      @click="color('#ed153d')"
-    >
-      ​🔴​
-    </button>
-    <button
-      :class="{ active: activeColor === '#ed9a26' }"
-      aria-label="Orange"
-      title="Orange"
-      @click="color('#ed9a26')"
-    >
-      ​🟠​​
-    </button>
-    <button
-      :class="{ active: activeColor === '#ede215' }"
-      aria-label="Yellow"
-      title="Yellow"
-      @click="color('#ede215')"
-    >
-      ​​🟡​​
-    </button>
-    <button
-      :class="{ active: activeColor === '#30bd20' }"
-      aria-label="Green"
-      title="Green"
-      @click="color('#30bd20')"
-    >
-      ​🟢​​
-    </button>
-    <button
-      :class="{ active: activeColor === '#2656bf' }"
-      aria-label="Blue"
-      title="Blue"
-      @click="color('#2656bf')"
-    >
-      ​​🔵​​
-    </button>
-    <button
-      :class="{ active: activeColor === '#c24aed' }"
-      aria-label="Purple"
-      title="Purple"
-      @click="color('#c24aed')"
-    >
-      ​🟣​​
-    </button>
-    <button
-      :class="{ active: activeColor === '#bf6b26' }"
-      aria-label="Brown"
-      title="Brown"
-      @click="color('#bf6b26')"
-    >
-      ​​🟤​
-    </button>
-    <input
-      type="range"
-      min="1"
-      max="10"
-      step="1"
-      name="Size"
-      title="Size"
-      :value="activeSize"
-      @input="size"
-    />
-    <!-- <button id="l-solid" class="active" aria-label="Solid" title="Solid">
-      —
-    </button>
-    <button id="l-dashed" aria-label="Dashed" title="Dashed">┅</button>
-    <button id="l-dotted" aria-label="Dotted" title="Dotted">⋯</button> -->
+  <div class="controls">
+    <div class="selected-color" :style="{ backgroundColor: activeColor }"></div>
+    <div class="colors">
+      <button
+        class="color"
+        :class="{ active: activeColor === '#ffffff' }"
+        style="background-color: #ffffff"
+        aria-label="White"
+        title="White"
+        @click="color('#ffffff')"
+      ></button>
+      <button
+        class="color"
+        :class="{ active: activeColor === '#ef130b' }"
+        style="background-color: #ef130b"
+        aria-label="Red"
+        title="Red"
+        @click="color('#ef130b')"
+      ></button>
+      <button
+        class="color"
+        :class="{ active: activeColor === '#ff7100' }"
+        style="background-color: #ff7100"
+        aria-label="Orange"
+        title="Orange"
+        @click="color('#ff7100')"
+      ></button>
+      <button
+        class="color"
+        :class="{ active: activeColor === '#ffe400' }"
+        style="background-color: #ffe400"
+        aria-label="Yellow"
+        title="Yellow"
+        @click="color('#ffe400')"
+      ></button>
+      <button
+        class="color"
+        :class="{ active: activeColor === '#00cc00' }"
+        style="background-color: #00cc00"
+        aria-label="Green"
+        title="Green"
+        @click="color('#00cc00')"
+      ></button>
+      <button
+        class="color"
+        :class="{ active: activeColor === '#000000' }"
+        style="background-color: #000000"
+        aria-label="White"
+        title="White"
+        @click="color('#000000')"
+      ></button>
+      <button
+        class="color"
+        :class="{ active: activeColor === '#740b07' }"
+        style="background-color: #740b07"
+        aria-label="Dark Red"
+        title="Dark Red"
+        @click="color('#740b07')"
+      ></button>
+      <button
+        class="color"
+        :class="{ active: activeColor === '#c23800' }"
+        style="background-color: #c23800"
+        aria-label="Dark Orange"
+        title="Dark Orange"
+        @click="color('#c23800')"
+      ></button>
+      <button
+        class="color"
+        :class="{ active: activeColor === '#e8a200' }"
+        style="background-color: #e8a200"
+        aria-label="Dark Yellow"
+        title="Dark Yellow"
+        @click="color('#e8a200')"
+      ></button>
+      <button
+        class="color"
+        :class="{ active: activeColor === '#005510' }"
+        style="background-color: #005510"
+        aria-label="Dark Green"
+        title="Dark Green"
+        @click="color('#005510')"
+      ></button>
+      <button
+        class="color"
+        :class="{ active: activeColor === '#00b2ff' }"
+        style="background-color: #00b2ff"
+        aria-label="Blue"
+        title="Blue"
+        @click="color('#00b2ff')"
+      ></button>
+      <button
+        class="color"
+        :class="{ active: activeColor === '#231fd3' }"
+        style="background-color: #231fd3"
+        aria-label="Blue"
+        title="Blue"
+        @click="color('#231fd3')"
+      ></button>
+      <button
+        class="color"
+        :class="{ active: activeColor === '#a300ba' }"
+        style="background-color: #a300ba"
+        aria-label="Purple"
+        title="Purple"
+        @click="color('#a300ba')"
+      ></button>
+      <button
+        class="color"
+        :class="{ active: activeColor === '#d37caa' }"
+        style="background-color: #d37caa"
+        aria-label="Pink"
+        title="Pink"
+        @click="color('#d37caa')"
+      ></button>
+      <button
+        class="color"
+        :class="{ active: activeColor === '#a0522d' }"
+        style="background-color: #a0522d"
+        aria-label="Brown"
+        title="Brown"
+        @click="color('#a0522d')"
+      ></button>
+      <button
+        class="color"
+        :class="{ active: activeColor === '#00569e' }"
+        style="background-color: #00569e"
+        aria-label="Dark Blue"
+        title="Dark Blue"
+        @click="color('#00569e')"
+      ></button>
+      <button
+        class="color"
+        :class="{ active: activeColor === '#0e0865' }"
+        style="background-color: #0e0865"
+        aria-label="Dark Blue"
+        title="Dark Blue"
+        @click="color('#0e0865')"
+      ></button>
+      <button
+        class="color"
+        :class="{ active: activeColor === '#550069' }"
+        style="background-color: #550069"
+        aria-label="Dark Purple"
+        title="Dark Purple"
+        @click="color('#550069')"
+      ></button>
+      <button
+        class="color"
+        :class="{ active: activeColor === '#a75574' }"
+        style="background-color: #a75574"
+        aria-label="Dark Pink"
+        title="Dark Pink"
+        @click="color('#a75574')"
+      ></button>
+      <button
+        class="color"
+        :class="{ active: activeColor === '#63300d' }"
+        style="background-color: #63300d"
+        aria-label="Dark Brown"
+        title="Dark Brown"
+        @click="color('#63300d')"
+      ></button>
+    </div>
+    <div class="brushes">
+      <button class="brush" aria-label="Clear" title="Clear" @click="clear">
+        🗑
+      </button>
+      <button class="brush" aria-label="Undo" title="Undo" @click="undo">
+        ↩️
+      </button>
+      <button class="brush" aria-label="Redo" title="Redo" @click="redo">
+        ↪️
+      </button>
+      <button
+        class="brush"
+        :class="{ active: activeBrush === 'draw' }"
+        aria-label="Draw"
+        title="Draw"
+        @click="brush('draw')"
+      >
+        ✏️
+      </button>
+      <button
+        class="brush"
+        :class="{ active: activeBrush === 'line' }"
+        aria-label="Line"
+        title="Line"
+        @click="brush('line')"
+      >
+        ⁄
+      </button>
+      <button
+        class="brush"
+        :class="{ active: activeBrush === 'line' }"
+        aria-label="Arrow"
+        title="Arrow"
+        @click="brush('line', true)"
+      >
+        ↗
+      </button>
+      <button
+        class="brush"
+        :class="{ active: activeBrush === 'eraseLine' }"
+        aria-label="Eraser"
+        title="Eraser"
+        @click="brush('eraseLine')"
+      >
+        🧹
+      </button>
+      <button
+        class="brush"
+        :class="{ active: activeBrush === 'rectangle' }"
+        aria-label="Rect"
+        title="Rect"
+        @click="brush('rectangle')"
+      >
+        □
+      </button>
+      <button
+        class="brush"
+        :class="{ active: activeBrush === 'ellipse' }"
+        aria-label="Ellipse"
+        title="Ellipse"
+        @click="brush('ellipse')"
+      >
+        ○
+      </button>
+    </div>
+    <div class="sizes">
+      <button
+        class="size size--small"
+        :class="{ active: activeSize === 2 }"
+        aria-label="Small"
+        title="Small"
+        @click="size(2)"
+      >
+      </button>
+      <button
+        class="size size--medium"
+        :class="{ active: activeSize === 6 }"
+        aria-label="Medium"
+        title="Medium"
+        @click="size(6)"
+      >
+      </button>
+      <button
+        class="size size--large"
+        :class="{ active: activeSize === 12 }"
+        aria-label="Large"
+        title="Large"
+        @click="size(12)"
+      >
+      </button>
+      <button
+        class="size size--xl"
+        :class="{ active: activeSize === 40 }"
+        aria-label="Extra Large"
+        title="Extra Large"
+        @click="size(40)"
+      >
+      </button>
+    </div>
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 2vh 0 1vh;
+  position: relative;
+}
+.controls:before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  top: 0.5vh;
+  background-color: white;
+}
+.controls:after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  background: center top url(/line.png) repeat-x;
+  height: 6px;
+}
+.controls > * {
+  position: relative;
+}
+.selected-color {
+  width: 16vw;
+  height: 16vw;
+  border-radius: 50%;
+  border: 1px solid black;
+}
+button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 8vw;
+  height: 8vw;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: transparent;
+}
+.colors {
+  display: flex;
+  flex-wrap: wrap;
+  width: 40vw;
+}
+.brushes {
+  display: flex;
+  flex-wrap: wrap;
+  width: 24vw;
+}
+.sizes {
+  display: flex;
+  flex-wrap: wrap;
+  width: 16vw;
+}
+.size--small:before {
+  content: '';
+  display: block;
+  height: 2vw;
+  width: 2vw;
+  background-color: black;
+  border-radius: 50%;
+}
+.size--medium:before {
+  content: '';
+  display: block;
+  height: 4vw;
+  width: 4vw;
+  background-color: black;
+  border-radius: 50%;
+}
+.size--large:before {
+  content: '';
+  display: block;
+  height: 6vw;
+  width: 6vw;
+  background-color: black;
+  border-radius: 50%;
+}
+.size--xl:before {
+  content: '';
+  display: block;
+  height: 8vw;
+  width: 8vw;
+  background-color: black;
+  border-radius: 50%;
+}
+</style>

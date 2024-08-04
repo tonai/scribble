@@ -5,6 +5,8 @@ import {
   drauu,
   drawingPayer,
   dump,
+  guessWord,
+  hint,
   language,
   mode,
   playerId,
@@ -16,7 +18,6 @@ import {
 } from "../store"
 import { Mode } from "../types/logic"
 import Choose from "./Choose.vue"
-import CountDown from "./CountDown.vue"
 import Draw from "./Draw.vue"
 import DrawControls from "./DrawControls.vue"
 import Guess from "./Guess.vue"
@@ -39,11 +40,17 @@ onMounted(() => {
       if (playersReady.value !== game.playersReady) {
         playersReady.value = game.playersReady
       }
+      if (countDown.value !== game.countDown) {
+        countDown.value = game.countDown
+      }
       if (drawingPayer.value !== game.drawingPayer) {
         drawingPayer.value = game.drawingPayer
       }
-      if (countDown.value !== game.countDown) {
-        countDown.value = game.countDown
+      if (guessWord.value !== game.guessWord) {
+        guessWord.value = game.guessWord
+      }
+      if (hint.value !== game.hint) {
+        hint.value = game.hint
       }
       if (language.value !== game.language) {
         language.value = game.language
@@ -73,19 +80,25 @@ onMounted(() => {
 </script>
 
 <template>
-  <Header />
-  <StartScreen v-if="mode === Mode.WAIT" />
-  <div v-else class="container">
-    <Draw />
-    <CountDown />
-    <DrawControls v-if="drawingPayer === playerId" />
-    <Choose v-if="drawingPayer === playerId && mode === Mode.CHOOSE" />
-    <Guess v-if="drawingPayer !== playerId && mode === Mode.PLAY" />
-    <Scores v-if="mode === Mode.SCORES" />
+  <div class="app" :class="Mode[mode]">
+    <Header />
+    <StartScreen v-if="mode === Mode.WAIT" />
+    <div v-else class="container">
+      <Draw />
+      <DrawControls v-if="drawingPayer === playerId" />
+      <Choose v-if="drawingPayer === playerId && mode === Mode.CHOOSE" />
+      <Guess v-if="drawingPayer !== playerId && mode === Mode.PLAY" />
+      <Scores v-if="mode === Mode.SCORES" />
+    </div>
   </div>
 </template>
 
 <style scoped>
+.app {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
 .container {
   display: flex;
   height: 100%;

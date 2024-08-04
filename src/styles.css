@@ -3,59 +3,58 @@ body {
   height: 100vh;
   background-color: white;
 }
-
 #app {
   height: 100%;
   display: flex;
   flex-direction: column;
 }
-
 #app:before {
   opacity: 0.1;
   content: "";
   position: absolute;
   inset: 0;
   background:
-    calc(100vw - 120px) calc(100vh - 200px) / 106px 194px url(/idea.png) no-repeat,
-    calc(100vw - 80px) 120px / 126px 122px url(/smile.png) no-repeat,
-    center center / 204px 120px url(/say.png) no-repeat,
-    10px calc(100vh - 220px) / 46px 56px url(/heart2.png) no-repeat,
-    60px calc(100vh - 120px) / 60px 96px url(/fire.png) no-repeat,
-    20px 80px / 80px 120px url(/spring.png) no-repeat,
-    center calc(100vh - 250px) / 72px 76px url(/star2.png) no-repeat;
+    70vw 75vh / 106px 194px url(/idea.png) no-repeat,
+    80vw 20vh / 126px 122px url(/smile.png) no-repeat,
+    center 35vh / 204px 120px url(/say.png) no-repeat,
+    5vw 65vh / 46px 56px url(/heart2.png) no-repeat,
+    20vw 80vh / 60px 96px url(/fire.png) no-repeat,
+    5vw 12vh / 80px 120px url(/spring.png) no-repeat,
+    center 55vh / 72px 76px url(/star2.png) no-repeat;
   z-index: -1;
 }
-
 button {
   cursor: pointer;
 }
-
 .icon {
   width: 1em;
   height: 1em;
 }
-
 .button {
   padding: 1vh 2vw;
   border-width: 6px;
   border-image: url("/border.png") 6;
   position: relative;
   background-color: transparent;
+  font-size: inherit;
 }
-
+.button span {
+  position: relative;
+  z-index: 1;
+}
 .button:before {
   content: '';
   position: absolute;
   inset: 0;
   background-color: white;
-  z-index: -1;
 }
-
 .button--selected {
   border-image: url("/border-selected.png") 6;
   color: white;
 }
-
 .button--selected:before {
   background-color: #2a2a2a;
+}
+.PLAY {
+  background-color: grey;
 }

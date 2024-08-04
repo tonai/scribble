@@ -28,6 +28,7 @@ export function selectWord(game: GameState) {
   })
   game.playersGuessed = {}
   game.dump = []
+  game.hint = []
 }
 
 export function startRound(game: GameState) {

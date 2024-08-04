@@ -1,6 +1,17 @@
 <script setup lang="ts">
-import { playerId, playerIds } from "../store"
+import { computed } from "vue"
+import { guessWord, hint, mode, playerId, playerIds } from "../store"
 import Avatar from "./Avatar.vue"
+import CountDown from "./CountDown.vue"
+import { Mode } from "../types/logic";
+
+const hintWord = computed(() => {
+  const hintWord = guessWord.value.replaceAll(/[^\s]/ig, "_").split("")
+  for (const index of hint.value) {
+    hintWord[index] = guessWord.value[index]
+  }
+  return hintWord.join("")
+})
 </script>
 
 <template>
@@ -10,20 +21,53 @@ import Avatar from "./Avatar.vue"
         <Avatar :id="id" />
       </li>
     </ul>
+    <div v-if="mode === Mode.PLAY" class="play">
+      <div class="hint">{{ hintWord }}</div>
+      <CountDown />
+    </div>
   </header>
 </template>
 
 <style scoped>
 .header {
-  background: center bottom url(/line.png) repeat-x;
+  padding: 0.5vh 0 1.5vh;
+  position: relative;
+    z-index: 1;
 }
-
+.header:before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  bottom: 0.5vh;
+  background-color: white;
+}
+.header:after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: center bottom url(/line.png) repeat-x;
+  height: 6px;
+}
+.header > * {
+  position: relative;
+}
 .list {
   list-style-type: none;
-  padding: 1vh 0 2vh;
+  padding: 0;
   margin: 0;
   display: flex;
   justify-content: center;
   gap: 4vw;
+}
+.play {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 5vw;
+  height: 3vh;
+}
+.hint {
+  letter-spacing: 2px;
 }
 </style>

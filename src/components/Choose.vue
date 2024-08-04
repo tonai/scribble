@@ -10,11 +10,12 @@ function choose(word: string) {
   <div class="choose">
     <button
       v-for="word of words"
+      class="button"
       type="button"
       @click="choose(word)"
       :key="word"
     >
-      {{ word }}
+      <span>{{ word }}</span>
     </button>
   </div>
 </template>
@@ -24,5 +25,11 @@ function choose(word: string) {
   position: absolute;
   inset: 0;
   background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5vh;
+  font-size: 6vw;
 }
 </style>
