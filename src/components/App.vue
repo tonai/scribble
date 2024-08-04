@@ -8,6 +8,9 @@ import {
   language,
   mode,
   playerId,
+  playerIds,
+  playersLanguage,
+  playersReady,
   scores,
   words,
 } from "../store"
@@ -17,6 +20,7 @@ import CountDown from "./CountDown.vue"
 import Draw from "./Draw.vue"
 import DrawControls from "./DrawControls.vue"
 import Guess from "./Guess.vue"
+import Header from "./Header.vue"
 import Scores from "./Scores.vue"
 import StartScreen from "./StartScreen.vue"
 
@@ -25,6 +29,15 @@ onMounted(() => {
     onChange: ({ game, yourPlayerId }) => {
       if (yourPlayerId && playerId.value !== yourPlayerId) {
         playerId.value = yourPlayerId
+      }
+      if (playerIds.value !== game.playerIds) {
+        playerIds.value = game.playerIds
+      }
+      if (playersLanguage.value !== game.playersLanguage) {
+        playersLanguage.value = game.playersLanguage
+      }
+      if (playersReady.value !== game.playersReady) {
+        playersReady.value = game.playersReady
       }
       if (drawingPayer.value !== game.drawingPayer) {
         drawingPayer.value = game.drawingPayer
@@ -60,6 +73,7 @@ onMounted(() => {
 </script>
 
 <template>
+  <Header />
   <StartScreen v-if="mode === Mode.WAIT" />
   <div v-else class="container">
     <Draw />

@@ -34,7 +34,7 @@ export interface GameState {
   mode: Mode
   playerIds: PlayerId[]
   playersGuessed: Record<PlayerId, number>
-  playersLanguage: Record<PlayerId, Language>
+  playersLanguage: { id: string, language: Language }[]
   playersReady: PlayerId[]
   rounds: Record<PlayerId, number>
   scores: Record<PlayerId, number>

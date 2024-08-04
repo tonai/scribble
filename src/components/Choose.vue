@@ -1,14 +1,21 @@
 <script setup lang="ts">
-import { words } from '../store';
+import { words } from "../store"
 
 function choose(word: string) {
-  Dusk.actions.choose(word);
+  Dusk.actions.choose(word)
 }
 </script>
 
 <template>
   <div class="choose">
-    <button v-for="word of words" type="button" @click="choose(word)">{{ word }}</button>
+    <button
+      v-for="word of words"
+      type="button"
+      @click="choose(word)"
+      :key="word"
+    >
+      {{ word }}
+    </button>
   </div>
 </template>
 

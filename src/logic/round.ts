@@ -4,15 +4,15 @@ import { randomInt } from "../helpers/math"
 import { GameState, Language, Mode } from "../types/logic"
 
 export function selectLanguage(game: GameState) {
-  const groupedVotes = Object.values(game.playersLanguage).reduce((acc, vote) => {
-    acc[vote] = (acc[vote] ?? 0) + 1;
+  const groupedVotes = game.playersLanguage.reduce((acc, { language }) => {
+    acc[language] = (acc[language] ?? 0) + 1;
     return acc;
   }, {} as Record<Language, number>);
   const max = Math.max(...Object.values(groupedVotes));
   const maxVotes = Object.entries(groupedVotes).filter(
     ([_, number]) => number === max
   ) as [Language, number][];
-  const index = randomInt(0, maxVotes.length - 1);
+  const index = randomInt(maxVotes.length - 1);
   game.language = maxVotes[index][0];
 }
 
