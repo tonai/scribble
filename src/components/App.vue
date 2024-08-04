@@ -88,8 +88,8 @@ onMounted(() => {
       <DrawControls v-if="drawingPayer === playerId" />
       <Choose v-if="drawingPayer === playerId && mode === Mode.CHOOSE" />
       <Guess v-if="drawingPayer !== playerId && mode === Mode.PLAY" />
-      <Scores v-if="mode === Mode.SCORES" />
     </div>
+    <Scores v-if="mode === Mode.SCORES" />
   </div>
 </template>
 

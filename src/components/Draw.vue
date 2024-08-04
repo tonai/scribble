@@ -71,8 +71,11 @@ function resize() {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: -0.5vh 0;
+  margin: -0.5vh 0 0;
   position: relative;
+}
+.draw:has(+ div) {
+  margin-bottom: -0.5vh;
 }
 .container {
   position: absolute;

@@ -30,7 +30,7 @@ const hintWord = computed(() => {
 
 <style scoped>
 .header {
-  padding: 0.5vh 0 1.5vh;
+  padding: 0.5vh 0 2.5vh;
   position: relative;
     z-index: 1;
 }
@@ -59,7 +59,7 @@ const hintWord = computed(() => {
   margin: 0;
   display: flex;
   justify-content: center;
-  gap: 4vw;
+  gap: 3vw;
 }
 .play {
   display: flex;

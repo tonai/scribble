@@ -55,6 +55,6 @@ button {
 .button--selected:before {
   background-color: #2a2a2a;
 }
-.PLAY {
+.CHOOSE, .PLAY, .SCORES {
   background-color: grey;
 }
