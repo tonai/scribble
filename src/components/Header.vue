@@ -35,24 +35,17 @@ const hintWord = computed(() => {
 
 <style scoped>
 .header {
-  padding: 0.5vh 0 2vh;
+  padding: 0.5vh 0 1.5vh;
   position: relative;
   z-index: 1;
   background-color: white;
 }
-/*.header:before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  bottom: 0.5vh;
-  background-color: white;
-}*/
 .header:after {
   content: '';
   position: absolute;
   left: 0;
   right: 0;
-  bottom: -0.5vh;
+  bottom: -3px;
   background: center bottom url(/line.png) repeat-x;
   height: 6px;
 }
@@ -72,6 +65,7 @@ const hintWord = computed(() => {
   justify-content: space-between;
   padding: 0 5vw;
   height: 3vh;
+  font-size: 6vw;
 }
 .hint {
   letter-spacing: 2px;

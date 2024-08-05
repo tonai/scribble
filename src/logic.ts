@@ -119,7 +119,9 @@ Dusk.initLogic({
     playerLeft(playerId, { game }) {
       game.playerIds.splice(game.playerIds.indexOf(playerId), 1)
       game.playersReady.splice(game.playersReady.indexOf(playerId), 1)
-      if (game.mode === Mode.PLAY && playerId === game.drawingPayer) {
+      if (game.mode === Mode.CHOOSE && playerId === game.drawingPayer) {
+        selectWord(game)
+      } else if (game.mode === Mode.PLAY && playerId === game.drawingPayer) {
         endRound(game)
       }
     },

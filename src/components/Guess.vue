@@ -20,31 +20,30 @@ function submit(event: Event) {
 
 <style scoped>
 .form {
-  padding: 2vh 0 1vh;
+  padding: 2vh 2vw 1vh;
   display:flex;
   align-items: center;
   justify-content: center;
-  gap: 5vw;
+  gap: 2vw;
   position: relative;
   font-size: 4vw;
   background-color: white;
+  font-size: 6vw;
 }
-/*.form:before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  top: 0.5vh;
-}*/
 .form:after {
   content: '';
   position: absolute;
   left: 0;
   right: 0;
-  top: -0.5vh;
+  top: -3px;
   background: center top url(/line.png) repeat-x;
   height: 6px;
 }
 .form > * {
   position: relative;
+}
+.input {
+  flex: 1;
+  width: 100%;
 }
 </style>

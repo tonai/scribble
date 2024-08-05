@@ -314,22 +314,17 @@ function size(size: number) {
   display: flex;
   align-items: center;
   justify-content: space-around;
-  padding: 2vh 0 1vh;
+  padding: 1.5vh 0 0.5vh;
   position: relative;
   background-color: white;
+  font-size: 6vw;
 }
-/*.controls:before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  top: 0.5vh;
-}*/
 .controls:after {
   content: '';
   position: absolute;
   left: 0;
   right: 0;
-  top: -0.5vh;
+  top: -3px;
   background: center top url(/line.png) repeat-x;
   height: 6px;
 }
@@ -352,6 +347,7 @@ button {
   margin: 0;
   border: 0;
   background: transparent;
+  font-size: inherit;
 }
 .colors {
   display: flex;

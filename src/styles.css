@@ -36,7 +36,7 @@ button {
   border-image: url("/border.png") 6;
   position: relative;
   background-color: transparent;
-  font-size: inherit;
+  font-size: inherit;font-size: inherit;
 }
 .button span {
   position: relative;

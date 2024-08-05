@@ -58,6 +58,7 @@ export function endRound(game: GameState) {
   game.playersGuessed[game.drawingPayer] = score
   game.scores[game.drawingPayer] += score
   game.playersReady = []
+  console.log(JSON.parse(JSON.stringify(game.rounds)));
   if (
     !Object.values(game.rounds).some((playedRounds) => playedRounds < rounds)
   ) {
