@@ -7,7 +7,7 @@ export enum Mode {
   WAIT,
 }
 
-export type Language = 'en' | 'fr' | 'ru' | 'es' | 'pt' | 'cn'
+export type Language = "en" | "fr" | "ru" | "es" | "pt" | "cn"
 
 export interface LanguageWords {
   easy: string[]
@@ -23,19 +23,22 @@ export enum Action {
   DELETE,
 }
 
-export type DiffAction = [Action.CLEAR] | [Action.ADD, number, string] | [Action.DELETE, number]
+export type DiffAction =
+  | [Action.CLEAR]
+  | [Action.ADD, number, string]
+  | [Action.DELETE, number]
 
 export interface GameState {
   countDown: string
   drawingPayer: PlayerId
   dump: string[]
   guessWord: string
-  hint: { index: number, revealTime: number }[];
+  hint: { index: number; revealTime: number }[]
   language: Language | null
   mode: Mode
   playerIds: PlayerId[]
   playersGuessed: Record<PlayerId, number>
-  playersLanguage: { id: string, language: Language }[]
+  playersLanguage: { id: string; language: Language }[]
   playersReady: PlayerId[]
   rounds: Record<PlayerId, number>
   scores: Record<PlayerId, number>

@@ -36,7 +36,7 @@ Dusk.initLogic({
         return Dusk.invalidAction()
       }
       // Remove the chosen word from the list to have it multiple times
-      for (let list of Object.values(words[game.language ?? "en"])) {
+      for (const list of Object.values(words[game.language ?? "en"])) {
         const index = list.indexOf(word)
         if (index !== -1) {
           list.splice(index, 1)
@@ -99,9 +99,9 @@ Dusk.initLogic({
       if (game.mode !== Mode.WAIT && game.mode !== Mode.SCORES) {
         return Dusk.invalidAction()
       }
-      const index = game.playersReady.indexOf(playerId);
+      const index = game.playersReady.indexOf(playerId)
       if (index !== -1) {
-        game.playersReady.splice(index, 1);
+        game.playersReady.splice(index, 1)
       } else {
         game.playersReady.push(playerId)
         if (game.playersReady.length === game.playerIds.length) {

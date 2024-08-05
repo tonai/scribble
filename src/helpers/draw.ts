@@ -1,20 +1,20 @@
-import { Action, DiffAction } from "../types/logic";
+import { Action, DiffAction } from "../types/logic"
 
 export function getDiff(prev: string[], last: string[]): DiffAction[] {
   if (last.length === 0 && prev.length === 0) {
-    return [];
+    return []
   }
   if (last.length === 0) {
-    return [[Action.CLEAR]];
+    return [[Action.CLEAR]]
   }
-  const diff: DiffAction[] = [];
-  const all = [...new Set(prev.concat(last))];
-  for(const item of all) {
-    const prevIndex = prev.indexOf(item);
-    const lastIndex = last.indexOf(item);
+  const diff: DiffAction[] = []
+  const all = [...new Set(prev.concat(last))]
+  for (const item of all) {
+    const prevIndex = prev.indexOf(item)
+    const lastIndex = last.indexOf(item)
     // Everything is fine
     if (prevIndex === lastIndex) {
-      continue;
+      continue
     }
     // Deleted item
     if (lastIndex === -1) {
@@ -25,5 +25,5 @@ export function getDiff(prev: string[], last: string[]): DiffAction[] {
       diff.push([Action.ADD, lastIndex, item])
     }
   }
-  return diff;
+  return diff
 }
