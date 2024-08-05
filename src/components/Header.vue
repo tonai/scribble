@@ -1,15 +1,24 @@
 <script setup lang="ts">
 import { computed } from "vue"
-import { countDown, guessWord, hint, mode, playerId, playerIds, playersGuessed } from "../store"
+import {
+  countDown,
+  guessWord,
+  hint,
+  mode,
+  playerId,
+  playerIds,
+  playersGuessed,
+  step,
+} from "../store"
 import Avatar from "./Avatar.vue"
 import CountDown from "./CountDown.vue"
-import { Mode } from "../types/logic";
+import { Mode, Step } from "../types/logic"
 
 const hintWord = computed(() => {
   if (playerId.value in playersGuessed.value) {
-    return guessWord.value;
+    return guessWord.value
   }
-  const hintWord = guessWord.value.replaceAll(/[^\s'\.-]/ig, "_").split("")
+  const hintWord = guessWord.value.replaceAll(/[^\s'\.-]/gi, "_").split("")
   for (const { index, revealTime } of hint.value) {
     if (countDown.value < revealTime) {
       hintWord[index] = guessWord.value[index]
@@ -26,7 +35,7 @@ const hintWord = computed(() => {
         <Avatar :id="id" />
       </li>
     </ul>
-    <div v-if="mode === Mode.PLAY" class="play">
+    <div v-if="step === Step.PLAY && mode === Mode.GUESS" class="play">
       <div class="hint">{{ hintWord }}</div>
       <CountDown />
     </div>
@@ -41,7 +50,7 @@ const hintWord = computed(() => {
   background-color: white;
 }
 .header:after {
-  content: '';
+  content: "";
   position: absolute;
   left: 0;
   right: 0;

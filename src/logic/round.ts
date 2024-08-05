@@ -1,7 +1,7 @@
 import { hintPercentage, rounds, startCountDown } from "../constants/game"
 import { words } from "../constants/words"
-import { randomInt } from "../helpers/math"
-import { GameState, Language, Mode } from "../types/logic"
+import { randomInt, unusedRandomInt } from "../helpers/math"
+import { GameState, Language, Mode, Step } from "../types/logic"
 
 export function selectLanguage(game: GameState) {
   const groupedVotes = game.playersLanguage.reduce(
@@ -17,11 +17,33 @@ export function selectLanguage(game: GameState) {
   ) as [Language, number][]
   const index = randomInt(maxVotes.length - 1)
   game.language = maxVotes[index][0]
-  game.availableWords = words[game.language];
+  game.availableWords = words[game.language]
+}
+
+export function selectMode(game: GameState) {
+  const groupedVotes = Object.values(game.selectedModes).reduce(
+    (acc, mode) => {
+      acc[mode] = (acc[mode] ?? 0) + 1
+      return acc
+    },
+    {} as Record<Mode, number>
+  )
+  const max = Math.max(...Object.values(groupedVotes))
+  const maxVotes = Object.entries(groupedVotes).filter(
+    ([, number]) => number === max
+  ) as [string, number][]
+  const index = randomInt(maxVotes.length - 1)
+  game.mode = maxVotes[index][0] as Mode
+  if (game.mode === Mode.GUESS) {
+    selectWord(game)
+  } else {
+    game.drawDiff = Object.fromEntries(game.playerIds.map((id) => [id, []]))
+    game.step = Step.PLAY
+  }
 }
 
 export function selectWord(game: GameState) {
-  game.mode = Mode.CHOOSE
+  game.step = Step.CHOOSE
   const players = game.playerIds
   game.drawingPayer =
     players[(players.indexOf(game.drawingPayer) + 1) % players.length]
@@ -31,12 +53,12 @@ export function selectWord(game: GameState) {
     return words[index]
   })
   game.playersGuessed = {}
-  game.dump = []
+  game.drawDiff = { [game.drawingPayer]: [] }
   game.hint = []
 }
 
 export function startRound(game: GameState) {
-  game.mode = Mode.PLAY
+  game.step = Step.PLAY
   game.startTime = Dusk.gameTime()
   // Pre-calculate hints over time
   const hintWord = game.guessWord.replaceAll(/[^\s'.-]/gi, "_")
@@ -44,7 +66,10 @@ export function startRound(game: GameState) {
   const length = matches.length
   const hints = Math.floor(length * hintPercentage)
   for (let i = 0; i < hints; i++) {
-    const matchIndex = randomInt(length - 1)
+    const matchIndex = unusedRandomInt(
+      game.hint.map(({ index }) => index),
+      length - 1
+    )
     game.hint.push({
       index: matches[matchIndex].index,
       revealTime: (startCountDown * (hints - i)) / (hints + 1),
@@ -53,7 +78,7 @@ export function startRound(game: GameState) {
 }
 
 export function endRound(game: GameState) {
-  game.mode = Mode.SCORES
+  game.step = Step.SCORES
   const drawerScore = Object.values(game.playersGuessed).reduce(
     (acc, score) => acc + score,
     0
@@ -67,7 +92,7 @@ export function endRound(game: GameState) {
     !Object.values(game.rounds).some((playedRounds) => playedRounds < rounds) ||
     game.playerIds.length === 1
   ) {
-    game.gameOver = true;
+    game.gameOver = true
     Dusk.gameOver({
       players: game.scores,
       minimizePopUp: true,

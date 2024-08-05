@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { t } from "../helpers/i18n"
-import { gameOver, playerId, playersReady, scores } from "../store"
+import { gameOver, guessWord, playerId, playersReady, scores } from "../store"
 import Avatar from "./Avatar.vue"
 
 function ready() {
@@ -11,6 +11,7 @@ function ready() {
 <template>
   <div class="scores">
     <div class="dialog">
+      <div>{{  guessWord }}</div>
       <table>
         <tr v-for="(score, playerId) in scores" :key="playerId">
           <td class="cell"><Avatar :id="playerId" /></td>
@@ -50,7 +51,7 @@ function ready() {
   padding: 6vw 2vw;
 }
 .cell {
-  padding: 3vw;
+  padding: 2vw 3vw;
 }
 .total {
   font-weight: bold;

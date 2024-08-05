@@ -1,10 +1,16 @@
 <script setup lang="ts">
-import { computed, type Component } from "vue"
+import { compile, computed, type Component } from "vue"
 import logo from "../assets/logo.png"
 import { languages } from "../constants/game"
 import { t } from "../helpers/i18n"
-import { language, playerId, playerIds, playersLanguage, playersReady } from "../store"
-import { Language } from "../types/logic"
+import {
+  playerId,
+  playerIds,
+  playersLanguage,
+  playersReady,
+  selectedModes,
+} from "../store"
+import { Language, Mode } from "../types/logic"
 import Cn from "./icon/Cn.vue"
 import Es from "./icon/Es.vue"
 import Fr from "./icon/Fr.vue"
@@ -32,12 +38,23 @@ const playersByLanguage = computed(() =>
   )
 )
 
+const selectedFreeMode = computed(() =>
+  Object.entries(selectedModes.value)
+    .filter(([, mode]) => mode === Mode.FREE)
+    .map(([id]) => id)
+)
+const selectedGuessMode = computed(() =>
+  Object.entries(selectedModes.value)
+    .filter(([, mode]) => mode === Mode.GUESS)
+    .map(([id]) => id)
+)
+
 function selectLanguage(language: Language) {
   Dusk.actions.language(language)
 }
 
-function ready() {
-  Dusk.actions.ready()
+function mode(mode: Mode) {
+  Dusk.actions.mode(mode)
 }
 </script>
 
@@ -63,16 +80,29 @@ function ready() {
     </div>
   </div>
   <div class="modes">
-    <!-- <button v-if="language" class="mode button" type="button" @click="ready">
-      <span>{{ t("Free mode") }}</span>
-    </button> -->
     <button
       class="mode button"
-      :class="{ 'button--selected': playersReady.includes(playerId) }"
+      :class="{ 'button--selected': selectedFreeMode.includes(playerId) }"
       type="button"
-      @click="ready"
+      @click="mode(Mode.FREE)"
     >
-      <span>{{ t("Guess mode") }} ({{ playersReady.length }}/{{ playerIds.length }})</span>
+      <span
+        >{{ t("Free mode") }} ({{ selectedFreeMode.length }}/{{
+          playerIds.length
+        }})</span
+      >
+    </button>
+    <button
+      class="mode button"
+      :class="{ 'button--selected': selectedGuessMode.includes(playerId) }"
+      type="button"
+      @click="mode(Mode.GUESS)"
+    >
+      <span
+        >{{ t("Guess mode") }} ({{ selectedGuessMode.length }}/{{
+          playerIds.length
+        }})</span
+      >
     </button>
   </div>
 </template>

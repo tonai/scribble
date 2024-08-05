@@ -2,9 +2,8 @@
 import { onMounted } from "vue"
 import {
   countDown,
-  drauu,
   drawingPayer,
-  dump,
+  draw,
   gameOver,
   guessWord,
   hint,
@@ -16,9 +15,11 @@ import {
   playersLanguage,
   playersReady,
   scores,
+  selectedModes,
+  step,
   words,
 } from "../store"
-import { Mode } from "../types/logic"
+import { Mode, Step } from "../types/logic"
 import Choose from "./Choose.vue"
 import Draw from "./Draw.vue"
 import DrawControls from "./DrawControls.vue"
@@ -60,11 +61,17 @@ onMounted(() => {
       if (hint.value !== game.hint) {
         hint.value = game.hint
       }
+      if (mode.value !== game.mode) {
+        mode.value = game.mode
+      }
       if (language.value !== game.language) {
         language.value = game.language
       }
-      if (mode.value !== game.mode) {
-        mode.value = game.mode
+      if (selectedModes.value !== game.selectedModes) {
+        selectedModes.value = game.selectedModes
+      }
+      if (step.value !== game.step) {
+        step.value = game.step
       }
       if (game.drawingPayer === yourPlayerId && words.value !== game.words) {
         words.value = game.words
@@ -75,29 +82,27 @@ onMounted(() => {
           .sort(([_a, a], [_b, b]) => b - a)
           .map(([id, total]) => [id, { score: game.playersGuessed[id], total }])
       )
-      const gameDump = game.dump.join();
-      if (game.drawingPayer !== yourPlayerId && dump.value !== gameDump) {
-        dump.value = gameDump
-        if (drauu.value) {
-          drauu.value.load(gameDump)
-        }
-      }
+      draw(game.drawDiff)
     },
   })
 })
 </script>
 
 <template>
-  <div class="app" :class="Mode[mode]">
+  <div class="app" :class="Step[step]">
     <Header />
-    <StartScreen v-if="mode === Mode.WAIT" />
+    <StartScreen v-if="step === Step.WAIT" />
     <div v-else class="container">
       <Draw />
-      <DrawControls v-if="drawingPayer === playerId" />
-      <Choose v-if="drawingPayer === playerId && mode === Mode.CHOOSE" />
-      <Guess v-if="drawingPayer !== playerId && mode === Mode.PLAY" />
+      <DrawControls v-if="drawingPayer === playerId || mode === Mode.FREE" />
+      <Choose v-if="drawingPayer === playerId && step === Step.CHOOSE" />
+      <Guess
+        v-if="
+          drawingPayer !== playerId && step === Step.PLAY && mode === Mode.GUESS
+        "
+      />
     </div>
-    <Scores v-if="mode === Mode.SCORES" />
+    <Scores v-if="step === Step.SCORES" />
   </div>
 </template>
 

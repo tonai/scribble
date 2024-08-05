@@ -1,8 +1,14 @@
 import { startCountDown } from "./constants/game"
 import { words } from "./constants/words"
 import { getScore } from "./helpers/game"
-import { endRound, selectLanguage, selectWord, startRound } from "./logic/round"
-import { Action, DiffAction, Language, Mode } from "./types/logic"
+import {
+  endRound,
+  selectLanguage,
+  selectMode,
+  selectWord,
+  startRound,
+} from "./logic/round"
+import { DiffAction, Language, Mode, Step } from "./types/logic"
 
 Dusk.initLogic({
   minPlayers: 1,
@@ -13,25 +19,27 @@ Dusk.initLogic({
     availableWords: words.en,
     countDown: startCountDown,
     drawingPayer: allPlayerIds[0],
-    dump: [],
+    drawDiff: {},
     gameOver: false,
     guessWord: "",
     hint: [],
     language: null,
-    mode: Mode.WAIT,
+    mode: Mode.GUESS,
     playerIds: allPlayerIds,
     playersGuessed: {},
     playersLanguage: [],
     playersReady: [],
     rounds: Object.fromEntries(allPlayerIds.map((id) => [id, 0])),
     scores: Object.fromEntries(allPlayerIds.map((id) => [id, 0])),
+    selectedModes: {},
     startTime: 0,
+    step: Step.WAIT,
     words: [],
   }),
   actions: {
     choose(word, { game, playerId }) {
       if (
-        game.mode !== Mode.CHOOSE ||
+        game.step !== Step.CHOOSE ||
         playerId !== game.drawingPayer ||
         game.words.indexOf(word) === -1
       ) {
@@ -48,26 +56,31 @@ Dusk.initLogic({
       startRound(game)
     },
     draw(diff: DiffAction[], { game, playerId }) {
-      if (game.mode !== Mode.PLAY || playerId !== game.drawingPayer) {
+      if (
+        game.step !== Step.PLAY ||
+        (playerId !== game.drawingPayer && game.mode === Mode.GUESS)
+      ) {
         return Dusk.invalidAction()
       }
-      for (const [action, index, dump] of diff) {
-        switch (action) {
-          case Action.CLEAR:
-            game.dump = []
-            break
-          case Action.DELETE:
-            game.dump[index] = ""
-            break
-          case Action.ADD:
-            game.dump[index] = dump
-            break
-        }
-      }
-      game.dump = game.dump.filter((x) => x)
+      game.drawDiff[playerId] = diff
+      // for (const [id, action, index, dump] of diff) {
+      //   switch (action) {
+      //     case Action.CLEAR:
+      //       game.dump[id] = []
+      //       break
+      //     case Action.DELETE:
+      //       game.dump[id][index] = ""
+      //       break
+      //     case Action.ADD:
+      //     case Action.UPDATE:
+      //       game.dump[id][index] = dump
+      //       break
+      //   }
+      // }
+      // game.dump[id] = game.dump[id].filter((x) => x)
     },
     guess(word: string, { game, playerId }) {
-      if (game.mode !== Mode.PLAY || playerId in game.playersGuessed) {
+      if (game.step !== Step.PLAY || playerId in game.playersGuessed) {
         return Dusk.invalidAction()
       }
       if (word.toLowerCase() === game.guessWord.toLowerCase()) {
@@ -85,7 +98,7 @@ Dusk.initLogic({
       }
     },
     language(language: Language, { game, playerId }) {
-      if (game.mode !== Mode.WAIT) {
+      if (game.step !== Step.WAIT) {
         return Dusk.invalidAction()
       }
       const index = game.playersLanguage.findIndex(({ id }) => id === playerId)
@@ -97,8 +110,17 @@ Dusk.initLogic({
         selectLanguage(game)
       }
     },
+    mode(mode, { game, playerId }) {
+      if (game.step !== Step.WAIT) {
+        return Dusk.invalidAction()
+      }
+      game.selectedModes[playerId] = mode
+      if (Object.keys(game.selectedModes).length === game.playerIds.length) {
+        selectMode(game)
+      }
+    },
     ready(_, { game, playerId }) {
-      if (game.mode !== Mode.WAIT && game.mode !== Mode.SCORES) {
+      if (game.step !== Step.SCORES) {
         return Dusk.invalidAction()
       }
       const index = game.playersReady.indexOf(playerId)
@@ -117,19 +139,22 @@ Dusk.initLogic({
       game.playerIds.push(playerId)
       game.scores[playerId] = 0
       game.rounds[playerId] = Math.min(...Object.values(game.rounds))
+      if (game.mode === Mode.FREE) {
+        game.drawDiff[playerId] = []
+      }
     },
     playerLeft(playerId, { game }) {
       game.playerIds.splice(game.playerIds.indexOf(playerId), 1)
       game.playersReady.splice(game.playersReady.indexOf(playerId), 1)
-      if (game.mode === Mode.CHOOSE && playerId === game.drawingPayer) {
+      if (game.step === Step.CHOOSE && playerId === game.drawingPayer) {
         selectWord(game)
-      } else if (game.mode === Mode.PLAY && playerId === game.drawingPayer) {
+      } else if (game.step === Step.PLAY && playerId === game.drawingPayer) {
         endRound(game)
       }
     },
   },
   update({ game }) {
-    if (game.mode === Mode.PLAY) {
+    if (game.step === Step.PLAY && game.mode === Mode.GUESS) {
       const countDown =
         (startCountDown * 1000 - (Dusk.gameTime() - game.startTime)) / 1000
       if (countDown <= 0) {

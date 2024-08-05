@@ -1,6 +1,11 @@
 import { DuskClient, PlayerId } from "dusk-games-sdk"
 
 export enum Mode {
+  FREE = "free",
+  GUESS = "guess",
+}
+
+export enum Step {
   CHOOSE,
   PLAY,
   SCORES,
@@ -21,18 +26,21 @@ export enum Action {
   CLEAR,
   ADD,
   DELETE,
+  UPDATE,
 }
 
-export type DiffAction =
-  | [Action.CLEAR]
-  | [Action.ADD, number, string]
-  | [Action.DELETE, number]
+export type ClearAction = [Action.CLEAR]
+export type AddAction = [Action.ADD, number, string]
+export type DeleteAction = [Action.DELETE, number]
+export type UpdateAction = [Action.UPDATE, number, string]
+
+export type DiffAction = ClearAction | AddAction | DeleteAction | UpdateAction
 
 export interface GameState {
   availableWords: LanguageWords
   countDown: number
   drawingPayer: PlayerId
-  dump: string[]
+  drawDiff: Record<PlayerId, DiffAction[]>
   gameOver: boolean
   guessWord: string
   hint: { index: number; revealTime: number }[]
@@ -44,7 +52,9 @@ export interface GameState {
   playersReady: PlayerId[]
   rounds: Record<PlayerId, number>
   scores: Record<PlayerId, number>
+  selectedModes: Record<PlayerId, Mode>
   startTime: number
+  step: Step
   words: string[]
 }
 
@@ -53,6 +63,7 @@ export type GameActions = {
   draw: (diff: DiffAction[]) => void
   guess: (word: string) => void
   language: (language: Language) => void
+  mode: (mode: Mode) => void
   ready: () => void
 }
 

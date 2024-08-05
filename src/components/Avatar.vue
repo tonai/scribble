@@ -1,22 +1,33 @@
 <script setup lang="ts">
-import { computed } from 'vue';
-import { drawingPayer, playersGuessed, mode } from "../store"
-import { Mode } from '../types/logic';
+import { computed } from "vue"
+import { drawingPayer, mode, playersGuessed, step } from "../store"
+import { Mode, Step } from "../types/logic"
 
 const { id } = defineProps<{
   id: string
 }>()
 
-const player = computed(() => Dusk.getPlayerInfo(id));
+const player = computed(() => Dusk.getPlayerInfo(id))
 </script>
 
 <template>
-  <div class="avatar" :class="{ guess: mode !== Mode.WAIT && id in playersGuessed && id !== drawingPayer }">
-    <img
-      class="image"
-      :src="player.avatarUrl"
-    />
-    <span class="drawingPlayer" v-if="mode !== Mode.WAIT && id === drawingPayer">✏️</span>
+  <div
+    class="avatar"
+    :class="{
+      guess:
+        (step == Step.PLAY || step == Step.SCORES) &&
+        id in playersGuessed &&
+        id !== drawingPayer,
+      noGuess:
+        step == Step.SCORES && !(id in playersGuessed) && id !== drawingPayer,
+    }"
+  >
+    <img class="image" :src="player.avatarUrl" />
+    <span
+      class="drawingPlayer"
+      v-if="step !== Step.WAIT && id === drawingPayer && mode === Mode.GUESS"
+      >✏️</span
+    >
   </div>
 </template>
 
@@ -31,6 +42,10 @@ const player = computed(() => Dusk.getPlayerInfo(id));
 .guess {
   border-color: green;
   background-color: green;
+}
+.noGuess {
+  border-color: red;
+  background-color: red;
 }
 .image {
   display: block;
