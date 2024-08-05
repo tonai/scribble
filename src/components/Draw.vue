@@ -9,15 +9,13 @@ const svg = ref<SVGSVGElement>()
 const interval = ref<number>()
 const lastDump = ref<string[]>([])
 
-onMounted(() => {})
-
 onMounted(() => {
   const drauuInstance = createDrauu({
     el: svg.value,
     brush: {
       mode: "draw",
       color: "black",
-      size: 5,
+      size: 6,
     },
   })
   drauu.value = drauuInstance
@@ -43,10 +41,6 @@ watch(mode, () => {
     drauu.value.clear()
   }
 })
-
-function resize() {
-  console.log("resize")
-}
 </script>
 
 <template>

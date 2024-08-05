@@ -1,11 +1,27 @@
 <script setup lang="ts">
-import { ref } from "vue"
+import { onMounted, ref } from "vue"
 import { DrawingMode } from "drauu"
 import { drauu } from "../store"
 
-const activeBrush = ref<DrawingMode>("draw")
+const activeBrush = ref<DrawingMode | "arrow">("draw")
 const activeColor = ref<string>("#000000")
-const activeSize = ref<number>(3)
+const activeSize = ref<number>(6)
+
+onMounted(() => {
+  if (drauu.value) {
+    if (drauu.value.brush.arrowEnd) {
+      activeBrush.value = 'arrow'
+    } else if (drauu.value.brush.mode) {
+      activeBrush.value = drauu.value.brush.mode
+    }
+    if (drauu.value.brush.color) {
+      activeColor.value = drauu.value.brush.color
+    }
+    if (drauu.value.brush.size) {
+      activeSize.value = drauu.value.brush.size
+    }
+  }
+});
 
 function undo() {
   drauu.value?.undo()
@@ -19,11 +35,16 @@ function clear() {
   drauu.value?.clear()
 }
 
-function brush(mode: DrawingMode, arrowEnd: boolean = false) {
+function brush(mode: DrawingMode | "arrow") {
   activeBrush.value = mode
   if (drauu.value) {
-    drauu.value.mode = mode
-    drauu.value.brush.arrowEnd = arrowEnd
+    if (mode === "arrow") {
+      drauu.value.mode = "line"
+      drauu.value.brush.arrowEnd = true
+    } else {
+      drauu.value.mode = mode
+      drauu.value.brush.arrowEnd = false
+    }
   }
 }
 
@@ -237,10 +258,10 @@ function size(size: number) {
       </button>
       <button
         class="brush"
-        :class="{ active: activeBrush === 'line' }"
+        :class="{ active: activeBrush === 'arrow' }"
         aria-label="Arrow"
         title="Arrow"
-        @click="brush('line', true)"
+        @click="brush('arrow')"
       >
         ↗
       </button>
@@ -274,37 +295,33 @@ function size(size: number) {
     </div>
     <div class="sizes">
       <button
-        class="size size--small"
-        :class="{ active: activeSize === 2 }"
-        aria-label="Small"
-        title="Small"
-        @click="size(2)"
-      >
-      </button>
-      <button
-        class="size size--medium"
-        :class="{ active: activeSize === 6 }"
-        aria-label="Medium"
-        title="Medium"
-        @click="size(6)"
-      >
-      </button>
+        class="size size--xl"
+        :class="{ active: activeSize === 40 }"
+        aria-label="Extra Large"
+        title="Extra Large"
+        @click="size(40)"
+      ></button>
       <button
         class="size size--large"
         :class="{ active: activeSize === 12 }"
         aria-label="Large"
         title="Large"
         @click="size(12)"
-      >
-      </button>
+      ></button>
       <button
-        class="size size--xl"
-        :class="{ active: activeSize === 40 }"
-        aria-label="Extra Large"
-        title="Extra Large"
-        @click="size(40)"
-      >
-      </button>
+        class="size size--medium"
+        :class="{ active: activeSize === 6 }"
+        aria-label="Medium"
+        title="Medium"
+        @click="size(6)"
+      ></button>
+      <button
+        class="size size--small"
+        :class="{ active: activeSize === 2 }"
+        aria-label="Small"
+        title="Small"
+        @click="size(2)"
+      ></button>
     </div>
   </div>
 </template>
@@ -317,10 +334,10 @@ function size(size: number) {
   padding: 1.5vh 0 0.5vh;
   position: relative;
   background-color: white;
-  font-size: 6vw;
+  font-size: 5vw;
 }
 .controls:after {
-  content: '';
+  content: "";
   position: absolute;
   left: 0;
   right: 0;
@@ -349,23 +366,38 @@ button {
   background: transparent;
   font-size: inherit;
 }
+.active {
+  background-color: #2cff2c;
+}
 .colors {
   display: flex;
   flex-wrap: wrap;
   width: 40vw;
+  border-top: 1px solid black;
+  border-left: 1px solid black;
+}
+.color {
+  border-bottom: 1px solid black;
+  border-right: 1px solid black;
 }
 .brushes {
   display: flex;
   flex-wrap: wrap;
   width: 24vw;
+  border-top: 1px solid black;
+  border-left: 1px solid black;
+}
+.brush {
+  border-bottom: 1px solid black;
+  border-right: 1px solid black;
 }
 .sizes {
   display: flex;
   flex-wrap: wrap;
-  width: 16vw;
+  width: 8vw;
 }
 .size--small:before {
-  content: '';
+  content: "";
   display: block;
   height: 2vw;
   width: 2vw;
@@ -373,7 +405,7 @@ button {
   border-radius: 50%;
 }
 .size--medium:before {
-  content: '';
+  content: "";
   display: block;
   height: 4vw;
   width: 4vw;
@@ -381,7 +413,7 @@ button {
   border-radius: 50%;
 }
 .size--large:before {
-  content: '';
+  content: "";
   display: block;
   height: 6vw;
   width: 6vw;
@@ -389,7 +421,7 @@ button {
   border-radius: 50%;
 }
 .size--xl:before {
-  content: '';
+  content: "";
   display: block;
   height: 8vw;
   width: 8vw;

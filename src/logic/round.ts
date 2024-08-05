@@ -68,7 +68,8 @@ export function endRound(game: GameState) {
   game.scores[game.drawingPayer] += score
   game.playersReady = []
   if (
-    !Object.values(game.rounds).some((playedRounds) => playedRounds < rounds)
+    !Object.values(game.rounds).some((playedRounds) => playedRounds < rounds) ||
+    game.playerIds.length === 1
   ) {
     Dusk.gameOver({
       players: game.scores,
