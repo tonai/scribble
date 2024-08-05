@@ -10,6 +10,7 @@ Dusk.initLogic({
   reactive: true,
   updatesPerSecond: 10,
   setup: (allPlayerIds) => ({
+    availableWords: words.en,
     countDown: startCountDown,
     drawingPayer: allPlayerIds[0],
     dump: [],
@@ -37,7 +38,7 @@ Dusk.initLogic({
         return Dusk.invalidAction()
       }
       // Remove the chosen word from the list to have it multiple times
-      for (const list of Object.values(words[game.language ?? "en"])) {
+      for (const list of Object.values(game.availableWords)) {
         const index = list.indexOf(word)
         if (index !== -1) {
           list.splice(index, 1)

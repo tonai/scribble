@@ -17,6 +17,7 @@ export function selectLanguage(game: GameState) {
   ) as [Language, number][]
   const index = randomInt(maxVotes.length - 1)
   game.language = maxVotes[index][0]
+  game.availableWords = words[game.language];
 }
 
 export function selectWord(game: GameState) {
@@ -25,7 +26,7 @@ export function selectWord(game: GameState) {
   game.drawingPayer =
     players[(players.indexOf(game.drawingPayer) + 1) % players.length]
   game.countDown = startCountDown
-  game.words = Object.values(words[game.language ?? "en"]).map((words) => {
+  game.words = Object.values(game.availableWords).map((words) => {
     const index = randomInt(words.length - 1)
     return words[index]
   })

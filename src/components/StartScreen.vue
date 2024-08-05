@@ -67,7 +67,6 @@ function ready() {
       <span>{{ t("Free mode") }}</span>
     </button> -->
     <button
-      v-if="language"
       class="mode button"
       :class="{ 'button--selected': playersReady.includes(playerId) }"
       type="button"
