@@ -6,7 +6,7 @@ import CountDown from "./CountDown.vue"
 import { Mode } from "../types/logic";
 
 const hintWord = computed(() => {
-  const hintWord = guessWord.value.replaceAll(/[^\s]/ig, "_").split("")
+  const hintWord = guessWord.value.replaceAll(/[^\s'\.-]/ig, "_").split("")
   for (const index of hint.value) {
     hintWord[index] = guessWord.value[index]
   }
@@ -30,23 +30,24 @@ const hintWord = computed(() => {
 
 <style scoped>
 .header {
-  padding: 0.5vh 0 2.5vh;
+  padding: 0.5vh 0 2vh;
   position: relative;
-    z-index: 1;
+  z-index: 1;
+  background-color: white;
 }
-.header:before {
+/*.header:before {
   content: '';
   position: absolute;
   inset: 0;
   bottom: 0.5vh;
   background-color: white;
-}
+}*/
 .header:after {
   content: '';
   position: absolute;
   left: 0;
   right: 0;
-  bottom: 0;
+  bottom: -0.5vh;
   background: center bottom url(/line.png) repeat-x;
   height: 6px;
 }

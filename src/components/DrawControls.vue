@@ -316,20 +316,20 @@ function size(size: number) {
   justify-content: space-around;
   padding: 2vh 0 1vh;
   position: relative;
+  background-color: white;
 }
-.controls:before {
+/*.controls:before {
   content: '';
   position: absolute;
   inset: 0;
   top: 0.5vh;
-  background-color: white;
-}
+}*/
 .controls:after {
   content: '';
   position: absolute;
   left: 0;
   right: 0;
-  top: 0;
+  top: -0.5vh;
   background: center top url(/line.png) repeat-x;
   height: 6px;
 }

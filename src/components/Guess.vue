@@ -26,20 +26,20 @@ function submit(event: Event) {
   gap: 5vw;
   position: relative;
   font-size: 4vw;
+  background-color: white;
 }
-.form:before {
+/*.form:before {
   content: '';
   position: absolute;
   inset: 0;
   top: 0.5vh;
-  background-color: white;
-}
+}*/
 .form:after {
   content: '';
   position: absolute;
   left: 0;
   right: 0;
-  top: 0;
+  top: -0.5vh;
   background: center top url(/line.png) repeat-x;
   height: 6px;
 }

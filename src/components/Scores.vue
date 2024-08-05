@@ -14,7 +14,7 @@ function ready() {
       <table>
         <tr v-for="(score, playerId) in scores" :key="playerId">
           <td class="cell"><Avatar :id="playerId" /></td>
-          <td class="cell">+{{ score.score }}</td>
+          <td class="cell">+{{ score.score ?? 0 }}</td>
           <td class="cell total">{{ score.total }}</td>
         </tr>
       </table>
