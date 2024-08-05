@@ -5,6 +5,7 @@ import {
   drauu,
   drawingPayer,
   dump,
+  gameOver,
   guessWord,
   hint,
   language,
@@ -49,6 +50,9 @@ onMounted(() => {
       }
       if (drawingPayer.value !== game.drawingPayer) {
         drawingPayer.value = game.drawingPayer
+      }
+      if (gameOver.value !== game.gameOver) {
+        gameOver.value = game.gameOver
       }
       if (guessWord.value !== game.guessWord) {
         guessWord.value = game.guessWord

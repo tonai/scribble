@@ -13,6 +13,7 @@ Dusk.initLogic({
     countDown: startCountDown,
     drawingPayer: allPlayerIds[0],
     dump: [],
+    gameOver: false,
     guessWord: "",
     hint: [],
     language: null,

@@ -66,6 +66,7 @@ export function endRound(game: GameState) {
     !Object.values(game.rounds).some((playedRounds) => playedRounds < rounds) ||
     game.playerIds.length === 1
   ) {
+    game.gameOver = true;
     Dusk.gameOver({
       players: game.scores,
       minimizePopUp: true,

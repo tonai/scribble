@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { t } from "../helpers/i18n"
-import { playerId, playersReady, scores } from "../store"
+import { gameOver, playerId, playersReady, scores } from "../store"
 import Avatar from "./Avatar.vue"
 
 function ready() {
@@ -19,6 +19,7 @@ function ready() {
         </tr>
       </table>
       <button
+        v-if="!gameOver"
         class="button"
         :class="{ 'button--selected': playersReady.includes(playerId) }"
         type="button"
