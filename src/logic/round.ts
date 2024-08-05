@@ -21,19 +21,23 @@ export function selectLanguage(game: GameState) {
 }
 
 export function selectMode(game: GameState) {
-  const groupedVotes = Object.values(game.selectedModes).reduce(
-    (acc, mode) => {
-      acc[mode] = (acc[mode] ?? 0) + 1
-      return acc
-    },
-    {} as Record<Mode, number>
-  )
-  const max = Math.max(...Object.values(groupedVotes))
-  const maxVotes = Object.entries(groupedVotes).filter(
-    ([, number]) => number === max
-  ) as [string, number][]
-  const index = randomInt(maxVotes.length - 1)
-  game.mode = maxVotes[index][0] as Mode
+  if (game.playerIds.length > 1) {
+    const groupedVotes = Object.values(game.selectedModes).reduce(
+      (acc, mode) => {
+        acc[mode] = (acc[mode] ?? 0) + 1
+        return acc
+      },
+      {} as Record<Mode, number>
+    )
+    const max = Math.max(...Object.values(groupedVotes))
+    const maxVotes = Object.entries(groupedVotes).filter(
+      ([, number]) => number === max
+    ) as [string, number][]
+    const index = randomInt(maxVotes.length - 1)
+    game.mode = maxVotes[index][0] as Mode
+  } else {
+    game.mode = Mode.FREE
+  }
   if (game.mode === Mode.GUESS) {
     selectWord(game)
   } else {

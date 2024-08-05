@@ -63,21 +63,6 @@ Dusk.initLogic({
         return Dusk.invalidAction()
       }
       game.drawDiff[playerId] = diff
-      // for (const [id, action, index, dump] of diff) {
-      //   switch (action) {
-      //     case Action.CLEAR:
-      //       game.dump[id] = []
-      //       break
-      //     case Action.DELETE:
-      //       game.dump[id][index] = ""
-      //       break
-      //     case Action.ADD:
-      //     case Action.UPDATE:
-      //       game.dump[id][index] = dump
-      //       break
-      //   }
-      // }
-      // game.dump[id] = game.dump[id].filter((x) => x)
     },
     guess(word: string, { game, playerId }) {
       if (game.step !== Step.PLAY || playerId in game.playersGuessed) {
@@ -146,6 +131,10 @@ Dusk.initLogic({
     playerLeft(playerId, { game }) {
       game.playerIds.splice(game.playerIds.indexOf(playerId), 1)
       game.playersReady.splice(game.playersReady.indexOf(playerId), 1)
+      game.playersLanguage.splice(
+        game.playersLanguage.findIndex(({ id }) => id === playerId),
+        1
+      )
       if (game.step === Step.CHOOSE && playerId === game.drawingPayer) {
         selectWord(game)
       } else if (game.step === Step.PLAY && playerId === game.drawingPayer) {

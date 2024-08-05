@@ -80,30 +80,37 @@ function mode(mode: Mode) {
     </div>
   </div>
   <div class="modes">
-    <button
-      class="mode button"
-      :class="{ 'button--selected': selectedFreeMode.includes(playerId) }"
-      type="button"
-      @click="mode(Mode.FREE)"
-    >
-      <span
-        >{{ t("Free mode") }} ({{ selectedFreeMode.length }}/{{
-          playerIds.length
-        }})</span
+    <div class="mode">
+      <button
+        class="mode button"
+        :class="{ 'button--selected': selectedFreeMode.includes(playerId) }"
+        type="button"
+        @click="mode(Mode.FREE)"
       >
-    </button>
-    <button
-      class="mode button"
-      :class="{ 'button--selected': selectedGuessMode.includes(playerId) }"
-      type="button"
-      @click="mode(Mode.GUESS)"
-    >
-      <span
-        >{{ t("Guess mode") }} ({{ selectedGuessMode.length }}/{{
-          playerIds.length
-        }})</span
+        <span
+          >{{ t("Free mode") }} ({{ selectedFreeMode.length }}/{{
+            playerIds.length
+          }})</span
+        >
+      </button>
+      <span>&nbsp;</span>
+    </div>
+    <div class="mode">
+      <button
+        class="button"
+        :class="{ 'button--selected': selectedGuessMode.includes(playerId) }"
+        :disabled="playerIds.length < 2"
+        type="button"
+        @click="mode(Mode.GUESS)"
       >
-    </button>
+        <span
+          >{{ t("Guess mode") }} ({{ selectedGuessMode.length }}/{{
+            playerIds.length
+          }})</span
+        >
+      </button>
+      <span>{{ t('min 2') }}</span>
+    </div>
   </div>
 </template>
 
@@ -156,5 +163,6 @@ function mode(mode: Mode) {
 .mode {
   flex: 1;
   font-size: 6vw;
+  text-align: center;
 }
 </style>
