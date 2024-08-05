@@ -29,7 +29,7 @@ export type DiffAction =
   | [Action.DELETE, number]
 
 export interface GameState {
-  countDown: string
+  countDown: number
   drawingPayer: PlayerId
   dump: string[]
   guessWord: string

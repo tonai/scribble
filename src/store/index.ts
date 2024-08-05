@@ -1,9 +1,9 @@
 import { Drauu } from "drauu"
 import { ref } from "vue"
-import { formatter, startCountDown } from "../constants/game"
+import { startCountDown } from "../constants/game"
 import { Language, Mode } from "../types/logic"
 
-export const countDown = ref(formatter.format(startCountDown))
+export const countDown = ref(startCountDown)
 export const drauu = ref<Drauu>()
 export const drawingPayer = ref("")
 export const dump = ref("")

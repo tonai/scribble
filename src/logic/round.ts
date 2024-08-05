@@ -1,9 +1,4 @@
-import {
-  formatter,
-  hintPercentage,
-  rounds,
-  startCountDown,
-} from "../constants/game"
+import { hintPercentage, rounds, startCountDown } from "../constants/game"
 import { words } from "../constants/words"
 import { randomInt } from "../helpers/math"
 import { GameState, Language, Mode } from "../types/logic"
@@ -29,7 +24,7 @@ export function selectWord(game: GameState) {
   const players = game.playerIds
   game.drawingPayer =
     players[(players.indexOf(game.drawingPayer) + 1) % players.length]
-  game.countDown = formatter.format(startCountDown)
+  game.countDown = startCountDown
   game.words = Object.values(words[game.language ?? "en"]).map((words) => {
     const index = randomInt(words.length - 1)
     return words[index]

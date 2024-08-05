@@ -1,4 +1,4 @@
-import { formatter, startCountDown } from "./constants/game"
+import { startCountDown } from "./constants/game"
 import { words } from "./constants/words"
 import { getScore } from "./helpers/game"
 import { endRound, selectLanguage, selectWord, startRound } from "./logic/round"
@@ -10,7 +10,7 @@ Dusk.initLogic({
   reactive: true,
   updatesPerSecond: 10,
   setup: (allPlayerIds) => ({
-    countDown: formatter.format(startCountDown),
+    countDown: startCountDown,
     drawingPayer: allPlayerIds[0],
     dump: [],
     guessWord: "",
@@ -133,7 +133,7 @@ Dusk.initLogic({
       if (countDown <= 0) {
         endRound(game)
       }
-      game.countDown = formatter.format(countDown)
+      game.countDown = countDown
     }
   },
 })

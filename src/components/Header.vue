@@ -11,7 +11,7 @@ const hintWord = computed(() => {
   }
   const hintWord = guessWord.value.replaceAll(/[^\s'\.-]/ig, "_").split("")
   for (const { index, revealTime } of hint.value) {
-    if (Number(countDown.value) < revealTime) {
+    if (countDown.value < revealTime) {
       hintWord[index] = guessWord.value[index]
     }
   }
