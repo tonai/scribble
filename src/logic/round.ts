@@ -1,4 +1,4 @@
-import { formatter, rounds, startCountDown } from "../constants/game"
+import { formatter, hintPercentage, rounds, startCountDown } from "../constants/game"
 import { words } from "../constants/words"
 import { randomInt } from "../helpers/math"
 import { GameState, Language, Mode } from "../types/logic"
@@ -34,6 +34,15 @@ export function selectWord(game: GameState) {
 export function startRound(game: GameState) {
   game.mode = Mode.PLAY
   game.startTime = Dusk.gameTime()
+  // Pre-calculate hints over time
+  const hintWord = game.guessWord.replaceAll(/[^\s'\.-]/ig, "_")
+  const matches = [...hintWord.matchAll(/_/g)]
+  const length = matches.length
+  const hints = Math.floor(length * hintPercentage)
+  for (let i = 0; i < hints; i++) {
+    const matchIndex = randomInt(length - 1)
+    game.hint.push({ index: matches[matchIndex].index, revealTime: startCountDown * (hints - i) / (hints + 1) })
+  }
 }
 
 export function endRound(game: GameState) {

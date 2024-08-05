@@ -1,14 +1,19 @@
 <script setup lang="ts">
 import { computed } from "vue"
-import { guessWord, hint, mode, playerId, playerIds } from "../store"
+import { countDown, guessWord, hint, mode, playerId, playerIds, playersGuessed } from "../store"
 import Avatar from "./Avatar.vue"
 import CountDown from "./CountDown.vue"
 import { Mode } from "../types/logic";
 
 const hintWord = computed(() => {
+  if (playerId.value in playersGuessed.value) {
+    return guessWord.value;
+  }
   const hintWord = guessWord.value.replaceAll(/[^\s'\.-]/ig, "_").split("")
-  for (const index of hint.value) {
-    hintWord[index] = guessWord.value[index]
+  for (const { index, revealTime } of hint.value) {
+    if (Number(countDown.value) < revealTime) {
+      hintWord[index] = guessWord.value[index]
+    }
   }
   return hintWord.join("")
 })

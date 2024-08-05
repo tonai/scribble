@@ -30,7 +30,7 @@ export interface GameState {
   drawingPayer: PlayerId
   dump: string[]
   guessWord: string
-  hint: number[];
+  hint: { index: number, revealTime: number }[];
   language: Language | null
   mode: Mode
   playerIds: PlayerId[]

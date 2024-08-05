@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import { playerId, playersGuessed } from '../store';
 
 const guess = ref('');
 
@@ -11,7 +12,7 @@ function submit(event: Event) {
 </script>
 
 <template>
-  <form class="form" @submit="submit">
+  <form v-if="!(playerId in playersGuessed)" class="form" @submit="submit">
     <input class="input button" v-model="guess" />
     <input class="submit button" type="submit" value="Guess" />
   </form>

@@ -11,6 +11,7 @@ import {
   mode,
   playerId,
   playerIds,
+  playersGuessed,
   playersLanguage,
   playersReady,
   scores,
@@ -33,6 +34,9 @@ onMounted(() => {
       }
       if (playerIds.value !== game.playerIds) {
         playerIds.value = game.playerIds
+      }
+      if (playersGuessed.value !== game.playersGuessed) {
+        playersGuessed.value = game.playersGuessed
       }
       if (playersLanguage.value !== game.playersLanguage) {
         playersLanguage.value = game.playersLanguage
