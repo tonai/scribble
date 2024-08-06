@@ -29,10 +29,10 @@ export enum Action {
   UPDATE,
 }
 
-export type ClearAction = [Action.CLEAR]
-export type AddAction = [Action.ADD, number, string]
-export type DeleteAction = [Action.DELETE, number]
-export type UpdateAction = [Action.UPDATE, number, string]
+export type ClearAction = [number, Action.CLEAR]
+export type AddAction = [number, Action.ADD, number, string, string]
+export type DeleteAction = [number, Action.DELETE, number, string, string]
+export type UpdateAction = [number, Action.UPDATE, number, string, string]
 
 export type DiffAction = ClearAction | AddAction | DeleteAction | UpdateAction
 
@@ -41,6 +41,7 @@ export interface GameState {
   countDown: number
   drawingPayer: PlayerId
   drawDiff: Record<PlayerId, DiffAction[]>
+  drawDump: Record<string, Record<string, { dump: string, time: number }>>
   gameOver: boolean
   guessWord: string
   hint: { index: number; revealTime: number }[]
@@ -60,6 +61,7 @@ export interface GameState {
 
 export type GameActions = {
   choose: (word: string) => void
+  clear: (time: number) => void
   draw: (diff: DiffAction[]) => void
   guess: (word: string) => void
   language: (language: Language) => void

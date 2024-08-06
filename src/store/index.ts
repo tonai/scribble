@@ -2,10 +2,13 @@ import { Drauu } from "drauu"
 import { ref } from "vue"
 import { startCountDown } from "../constants/game"
 import { Action, DiffAction, Language, Mode, Step } from "../types/logic"
-import { createSvg, removeSvg } from "../helpers/svg"
+import { createSvg, removeSvg, updateSvg } from "../helpers/svg"
 
 export const countDown = ref(startCountDown)
 export const drauu = ref<Drauu>()
+export const drawDump = ref<Record<string, Record<string, { dump: string; time: number }>>>(
+  {}
+)
 export const drawingPayer = ref("")
 export const gameOver = ref(false)
 export const guessWord = ref("")
@@ -24,41 +27,64 @@ export const words = ref<string[]>([])
 
 export const svg = ref<SVGSVGElement>()
 export const tmp = ref<SVGSVGElement>()
+export const lastTime = ref(0)
+export const lastDump = ref<string[]>([])
+export const lastNodes = ref<SVGElement[]>([])
 
 export function draw(drawDiff: Record<string, DiffAction[]>) {
   if (drauu.value && tmp.value) {
-    const entries = Object.entries(drawDiff).filter(
+    const entries = Object.entries(drawDiff)/*.filter(
       ([id]) => id !== playerId.value
-    )
+    )*/
+    let nextTime = 0
     for (const [id, actions] of entries) {
       for (const diffAction of actions) {
-        switch (diffAction[0]) {
+        const [time, action] = diffAction
+        if (time <= lastTime.value) {
+          continue
+        }
+        switch (action) {
           case Action.CLEAR: {
             drauu.value.load("")
             break
           }
           case Action.ADD: {
-            const node = createSvg(tmp.value, diffAction, id)
-            if (svg.value) {
+            if (svg.value && id !== playerId.value) {
+              const node = createSvg(tmp.value, diffAction, id, lastNodes.value, lastDump.value)
               svg.value.append(node)
             }
             break
           }
           case Action.UPDATE: {
-            const node = createSvg(tmp.value, diffAction, id)
-            if (svg.value) {
-              removeSvg(svg.value, diffAction, id)
+            if (svg.value && id !== playerId.value) {
+              const node = updateSvg(svg.value, tmp.value, diffAction, id, lastNodes.value, lastDump.value)
               svg.value.append(node)
             }
             break
           }
           case Action.DELETE: {
             if (svg.value) {
-              removeSvg(svg.value, diffAction, id)
+              removeSvg(svg.value, diffAction, lastNodes.value, lastDump.value)
             }
             break
           }
         }
+        nextTime = Math.max(nextTime, time)
+      }
+    }
+    lastTime.value = Math.max(lastTime.value, nextTime)
+  }
+}
+
+export function load(
+  dumps: { dump: string; id: string; index: number; time: number }[]
+) {
+  if (drauu.value && tmp.value) {
+    for (const playerDump of dumps) {
+      const { dump, id, index, time } = playerDump
+      const node = createSvg(tmp.value, [time, Action.ADD, index, String(time), dump], id, lastNodes.value, lastDump.value)
+      if (svg.value) {
+        svg.value.append(node)
       }
     }
   }

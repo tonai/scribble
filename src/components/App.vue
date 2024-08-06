@@ -4,6 +4,7 @@ import {
   countDown,
   drawingPayer,
   draw,
+  drawDump,
   gameOver,
   guessWord,
   hint,
@@ -48,6 +49,9 @@ onMounted(() => {
       }
       if (countDown.value !== game.countDown) {
         countDown.value = game.countDown
+      }
+      if (drawDump.value !== game.drawDump) {
+        drawDump.value = game.drawDump
       }
       if (drawingPayer.value !== game.drawingPayer) {
         drawingPayer.value = game.drawingPayer

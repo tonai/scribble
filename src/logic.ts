@@ -8,7 +8,14 @@ import {
   selectWord,
   startRound,
 } from "./logic/round"
-import { DiffAction, Language, Mode, Step } from "./types/logic"
+import {
+  Action,
+  DeleteAction,
+  DiffAction,
+  Language,
+  Mode,
+  Step,
+} from "./types/logic"
 
 Dusk.initLogic({
   minPlayers: 1,
@@ -20,6 +27,7 @@ Dusk.initLogic({
     countDown: startCountDown,
     drawingPayer: allPlayerIds[0],
     drawDiff: {},
+    drawDump: {},
     gameOver: false,
     guessWord: "",
     hint: [],
@@ -55,14 +63,45 @@ Dusk.initLogic({
       game.guessWord = word
       startRound(game)
     },
-    draw(diff: DiffAction[], { game, playerId }) {
+    clear(time: number, { game, playerId }) {
       if (
         game.step !== Step.PLAY ||
         (playerId !== game.drawingPayer && game.mode === Mode.GUESS)
       ) {
         return Dusk.invalidAction()
       }
-      game.drawDiff[playerId] = diff
+      if (game.mode === Mode.GUESS) {
+        game.drawDiff = { [game.drawingPayer]: [[time, Action.CLEAR]] }
+        game.drawDump = { [game.drawingPayer]: {} }
+      } else {
+        game.drawDiff = Object.fromEntries(
+          game.playerIds.map((id) => [id, [[time, Action.CLEAR]]])
+        )
+        game.drawDump = Object.fromEntries(game.playerIds.map((id) => [id, {}]))
+      }
+    },
+    draw(diffs: DiffAction[], { game, playerId }) {
+      if (
+        game.step !== Step.PLAY ||
+        (playerId !== game.drawingPayer && game.mode === Mode.GUESS)
+      ) {
+        return Dusk.invalidAction()
+      }
+      game.drawDiff[playerId] = diffs
+      for (const [time, action, , timeId, dumpOrId] of diffs) {
+        switch (action) {
+          case Action.DELETE:
+            delete game.drawDump[dumpOrId][timeId]
+            break
+
+          case Action.ADD:
+          case Action.UPDATE:
+            if (timeId) {
+              game.drawDump[playerId][timeId] = { dump: dumpOrId, time }
+            }
+            break
+        }
+      }
     },
     guess(word: string, { game, playerId }) {
       if (game.step !== Step.PLAY || playerId in game.playersGuessed) {
@@ -126,6 +165,7 @@ Dusk.initLogic({
       game.rounds[playerId] = Math.min(...Object.values(game.rounds))
       if (game.mode === Mode.FREE) {
         game.drawDiff[playerId] = []
+        game.drawDump[playerId] = {}
       }
     },
     playerLeft(playerId, { game }) {
@@ -135,10 +175,12 @@ Dusk.initLogic({
         game.playersLanguage.findIndex(({ id }) => id === playerId),
         1
       )
-      if (game.step === Step.CHOOSE && playerId === game.drawingPayer) {
-        selectWord(game)
-      } else if (game.step === Step.PLAY && playerId === game.drawingPayer) {
-        endRound(game)
+      if (game.mode === Mode.GUESS) {
+        if (game.step === Step.CHOOSE && playerId === game.drawingPayer) {
+          selectWord(game)
+        } else if (game.step === Step.PLAY && playerId === game.drawingPayer) {
+          endRound(game)
+        }
       }
     },
   },

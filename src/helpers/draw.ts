@@ -1,56 +1,42 @@
+import { playerId } from "../store"
 import { Action, DiffAction } from "../types/logic"
 
-function addToMap<K, V>(map: Map<K, V[]>, key: K, value: V) {
-  const item = map.get(key)
-  if (item) {
-    item.push(value)
-  } else {
-    map.set(key, [value])
-  }
-}
-
-export function getDiff(prev: string[], last: string[]): DiffAction[] {
-  if (last.length === 0 && prev.length === 0) {
+export function getDiff(
+  prevNodes: SVGElement[],
+  lastNodes: SVGElement[],
+  prevDump: string[],
+  lastDump: string[]
+): DiffAction[] {
+  if (lastNodes.length === 0 && prevNodes.length === 0) {
     return []
   }
-  if (last.length === 0) {
-    return [[Action.CLEAR]]
+  const now = Date.now()
+  if (lastNodes.length === 0) {
+    Dusk.actions.clear(now)
+    return []
   }
-  const diff: Map<number, DiffAction[]> = new Map()
-  const all = [...new Set(prev.concat(last))]
-  for (const item of all) {
-    const prevIndex = prev.indexOf(item)
-    const lastIndex = last.indexOf(item)
-    // Everything is fine
+  const diff: DiffAction[] = []
+  const all = [...new Set(prevNodes.concat(lastNodes))]
+  for (const node of all) {
+    const prevIndex = prevNodes.indexOf(node)
+    const lastIndex = lastNodes.indexOf(node)
+    // Update
     if (prevIndex === lastIndex) {
+      if (prevDump[prevIndex] !== lastDump[lastIndex] && (!("id" in node.dataset) || node.dataset.id === playerId.value)) {
+        diff.push([now, Action.UPDATE, lastIndex, node.dataset.time ?? '', node.outerHTML])
+      }
       continue
     }
     // Deleted item
     if (lastIndex === -1) {
-      addToMap(diff, prevIndex, [Action.DELETE, prevIndex])
+      diff.push([now, Action.DELETE, prevIndex, node.dataset.time ?? '', node.dataset.id ?? ''])
+      continue
     }
     // New item
-    if (prevIndex === -1) {
-      addToMap(diff, lastIndex, [Action.ADD, lastIndex, item])
+    if (prevIndex === -1 && (!("id" in node.dataset) || node.dataset.id === playerId.value)) {
+      diff.push([now, Action.ADD, lastIndex, node.dataset.time ?? '', node.outerHTML])
+      continue
     }
   }
-  const diffActions: DiffAction[] = []
-  for (const actions of diff.values()) {
-    const deleteIndex = actions[0][0] === Action.DELETE ? 0 : 1
-    const addIndex = actions[0][0] === Action.ADD ? 0 : 1
-    if (
-      actions.length === 2 &&
-      actions[deleteIndex][0] === Action.DELETE &&
-      actions[addIndex][0] === Action.ADD
-    ) {
-      const updateAction = [...actions[addIndex]]
-      updateAction[0] = Action.UPDATE
-      diffActions.push(updateAction as DiffAction)
-    } else {
-      for (const action of actions) {
-        diffActions.push(action)
-      }
-    }
-  }
-  return diffActions
+  return diff
 }

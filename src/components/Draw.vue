@@ -1,12 +1,23 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref, watch } from "vue"
 import { createDrauu } from "drauu"
-import { drauu, drawingPayer, step, playerId, mode, svg, tmp } from "../store"
+import {
+  drauu,
+  drawDump,
+  drawingPayer,
+  load,
+  playerId,
+  lastDump,
+  lastNodes,
+  mode,
+  svg,
+  step,
+  tmp,
+} from "../store"
 import { getDiff } from "../helpers/draw"
 import { Mode, Step } from "../types/logic"
 
 const interval = ref<number>()
-const lastDump = ref<string[]>([])
 
 onMounted(() => {
   const drauuInstance = createDrauu({
@@ -18,14 +29,33 @@ onMounted(() => {
     },
   })
   drauu.value = drauuInstance
+  let dump = Object.entries(drawDump.value)
+    .reduce(
+      (acc, [id, dumps], index) =>
+        acc.concat(
+          Object.entries(dumps).map(([time, dump]) => ({
+            ...dump,
+            id,
+            index,
+            time: Number(time),
+          }))
+        ),
+      [] as { dump: string; id: string; index: number; time: number }[]
+    )
+    .sort((a, b) => a.time - b.time)
+  load(dump)
 
   interval.value = setInterval(() => {
     if (svg.value && drauu.value) {
-      const dump = [...svg.value.children]
-        .filter((node) => node instanceof SVGElement && !("id" in node.dataset))
-        .map((node) => node.outerHTML)
-      const diff = getDiff(lastDump.value, dump)
+      const nodes = [...svg.value.children].filter(
+        (node) =>
+          node instanceof SVGElement /*&&
+          (!("id" in node.dataset) || node.dataset.id === playerId.value)*/
+      ) as SVGElement[]
+      const dump = nodes.map((node) => node.outerHTML)
+      const diff = getDiff(lastNodes.value, nodes, lastDump.value, dump)
       Dusk.actions.draw(diff)
+      lastNodes.value = nodes
       lastDump.value = dump
     }
   }, 1000 / 8)
@@ -42,16 +72,20 @@ watch(step, () => {
 })
 
 function committed(node?: SVGElement) {
-  if (node && svg.value) {
-    svg.value.append(node)
+  if (node) {
+    node.dataset.time = String(Date.now())
+    node.dataset.id = playerId.value
+    if (svg.value && mode.value === Mode.FREE) {
+      svg.value.append(node)
+    }
   }
 }
 
 onMounted(() => {
   if (drauu.value) {
-    drauu.value.on('committed', committed)
+    drauu.value.on("committed", committed)
   }
-});
+})
 </script>
 
 <template>

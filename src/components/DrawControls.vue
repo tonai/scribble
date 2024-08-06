@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue"
 import { DrawingMode } from "drauu"
-import { drauu } from "../store"
+import { drauu, mode } from "../store"
+import { Action, Mode } from "../types/logic"
 
 const activeBrush = ref<DrawingMode | "arrow">("draw")
 const activeColor = ref<string>("#000000")
@@ -33,6 +34,7 @@ function redo() {
 
 function clear() {
   drauu.value?.clear()
+  Dusk.actions.draw([[Date.now(), Action.CLEAR]])
 }
 
 function brush(mode: DrawingMode | "arrow") {
@@ -229,15 +231,6 @@ function size(size: number) {
       ></button>
     </div>
     <div class="brushes">
-      <button class="brush" aria-label="Clear" title="Clear" @click="clear">
-        🗑
-      </button>
-      <button class="brush" aria-label="Undo" title="Undo" @click="undo">
-        ↩️
-      </button>
-      <button class="brush" aria-label="Redo" title="Redo" @click="redo">
-        ↪️
-      </button>
       <button
         class="brush"
         :class="{ active: activeBrush === 'draw' }"
@@ -291,6 +284,15 @@ function size(size: number) {
         @click="brush('ellipse')"
       >
         ○
+      </button>
+      <button class="brush" aria-label="Clear" title="Clear" @click="clear">
+        🗑
+      </button>
+      <button v-if="mode === Mode.GUESS" class="brush" aria-label="Undo" title="Undo" @click="undo">
+        ↩️
+      </button>
+      <button v-if="mode === Mode.GUESS" class="brush" aria-label="Redo" title="Redo" @click="redo">
+        ↪️
       </button>
     </div>
     <div class="sizes">
