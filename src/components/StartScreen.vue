@@ -18,6 +18,7 @@ import Pt from "./icon/Pt.vue"
 import Ru from "./icon/Ru.vue"
 import Uk from "./icon/Uk.vue"
 import Avatar from "./Avatar.vue"
+import { playSound } from "../helpers/sound"
 
 const flags: Record<Language, Component> = {
   cn: Cn,
@@ -53,7 +54,10 @@ function selectLanguage(language: Language) {
   Dusk.actions.language(language)
 }
 
-function mode(mode: Mode) {
+function mode(mode: Mode, sound: boolean) {
+  if (sound) {
+    playSound("on");
+  }
   Dusk.actions.mode(mode)
 }
 </script>
@@ -85,7 +89,7 @@ function mode(mode: Mode) {
         class="mode button"
         :class="{ 'button--selected': selectedFreeMode.includes(playerId) }"
         type="button"
-        @click="mode(Mode.FREE)"
+        @click="mode(Mode.FREE, !selectedFreeMode.includes(playerId))"
       >
         <span
           >{{ t("Free mode") }} ({{ selectedFreeMode.length }}/{{
@@ -101,7 +105,7 @@ function mode(mode: Mode) {
         :class="{ 'button--selected': selectedGuessMode.includes(playerId) }"
         :disabled="playerIds.length < 2"
         type="button"
-        @click="mode(Mode.GUESS)"
+        @click="mode(Mode.GUESS, !selectedGuessMode.includes(playerId))"
       >
         <span
           >{{ t("Guess mode") }} ({{ selectedGuessMode.length }}/{{

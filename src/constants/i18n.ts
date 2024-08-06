@@ -6,35 +6,41 @@ export const translations: Record<Language, Record<string, string>> = {
     "Free mode": "Free mode",
     "Guess mode": "Guess mode",
     "min 2": "min 2",
+    "Waiting...": "Waiting..."
   },
   fr: {
     Ready: "Prêt",
     "Free mode": "Mode libre",
     "Guess mode": "Mode devinette",
     "min 2": "min 2",
+    "Waiting...": "En attente..."
   },
   ru: {
     Ready: "Готовый",
     "Free mode": "Свободный режим",
     "Guess mode": "Режим угадывания",
     "min 2": "мин 2",
+    "Waiting...": "Ожидающий..."
   },
   es: {
     Ready: "Listo",
     "Free mode": "Modo libre",
     "Guess mode": "Modo adivinar",
     "min 2": "mínimo 2",
+    "Waiting...": "Espera..."
   },
   pt: {
     Ready: "Preparar",
     "Free mode": "Modo livre",
     "Guess mode": "Modo de adivinhação",
     "min 2": "min 2",
+    "Waiting...": "Espera..."
   },
   cn: {
     Ready: "准备好",
     "Free mode": "自由模式",
     "Guess mode": "猜猜模式",
     "min 2": "分钟 2",
+    "Waiting...": "等待..."
   },
 }

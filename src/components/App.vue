@@ -20,6 +20,7 @@ import {
   step,
   words,
 } from "../store"
+import { initSounds, playSound } from "../helpers/sound"
 import { Mode, Step } from "../types/logic"
 import Choose from "./Choose.vue"
 import Draw from "./Draw.vue"
@@ -28,6 +29,14 @@ import Guess from "./Guess.vue"
 import Header from "./Header.vue"
 import Scores from "./Scores.vue"
 import StartScreen from "./StartScreen.vue"
+
+onMounted(() => {
+  initSounds({
+    start: ["sound/Scribble-06.mp3", "sound/Scribble-09.mp3"],
+    on: "sound/Scribble-Swipe-03.mp3",
+    off: "sound/Scribble-Swipe-02.mp3",
+  })
+})
 
 onMounted(() => {
   Dusk.initClient({
@@ -75,6 +84,9 @@ onMounted(() => {
         selectedModes.value = game.selectedModes
       }
       if (step.value !== game.step) {
+        if (game.step === Step.PLAY) {
+          playSound("start")
+        }
         step.value = game.step
       }
       if (game.drawingPayer === yourPlayerId && words.value !== game.words) {
@@ -100,11 +112,7 @@ onMounted(() => {
       <Draw />
       <DrawControls v-if="drawingPayer === playerId || mode === Mode.FREE" />
       <Choose v-if="drawingPayer === playerId && step === Step.CHOOSE" />
-      <Guess
-        v-if="
-          drawingPayer !== playerId && step === Step.PLAY && mode === Mode.GUESS
-        "
-      />
+      <Guess v-if="drawingPayer !== playerId && mode === Mode.GUESS" />
     </div>
     <Scores v-if="step === Step.SCORES" />
   </div>

@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { t } from "../helpers/i18n"
+import { playSound } from "../helpers/sound";
 import { gameOver, guessWord, playerId, playersReady, scores } from "../store"
 import Avatar from "./Avatar.vue"
 
-function ready() {
+function ready(on?: boolean) {
+  playSound(on ? "on" : "off")
   Dusk.actions.ready()
 }
 </script>
@@ -24,7 +26,7 @@ function ready() {
         class="button"
         :class="{ 'button--selected': playersReady.includes(playerId) }"
         type="button"
-        @click="ready"
+        @click="ready(!playersReady.includes(playerId))"
       >
         <span>{{ t("Ready") }}</span>
       </button>
