@@ -41,7 +41,7 @@ export interface GameState {
   countDown: number
   drawingPayer: PlayerId
   drawDiff: Record<PlayerId, DiffAction[]>
-  drawDump: Record<string, Record<string, { dump: string, time: number }>>
+  drawDump: Record<string, Record<string, { dump: string; time: number }>>
   gameOver: boolean
   guessWord: string
   hint: { index: number; revealTime: number }[]

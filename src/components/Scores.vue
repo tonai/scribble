@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { onMounted } from "vue";
 import { t } from "../helpers/i18n"
 import { playSound } from "../helpers/sound";
 import { gameOver, guessWord, playerId, playersReady, scores } from "../store"
@@ -8,6 +9,10 @@ function ready(on?: boolean) {
   playSound(on ? "on" : "off")
   Dusk.actions.ready()
 }
+
+onMounted(() => {
+  playSound("scores")
+})
 </script>
 
 <template>

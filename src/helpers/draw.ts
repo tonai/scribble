@@ -22,19 +22,43 @@ export function getDiff(
     const lastIndex = lastNodes.indexOf(node)
     // Update
     if (prevIndex === lastIndex) {
-      if (prevDump[prevIndex] !== lastDump[lastIndex] && (!("id" in node.dataset) || node.dataset.id === playerId.value)) {
-        diff.push([now, Action.UPDATE, lastIndex, node.dataset.time ?? '', node.outerHTML])
+      if (
+        prevDump[prevIndex] !== lastDump[lastIndex] &&
+        (!("id" in node.dataset) || node.dataset.id === playerId.value)
+      ) {
+        diff.push([
+          now,
+          Action.UPDATE,
+          lastIndex,
+          node.dataset.time ?? "",
+          node.outerHTML,
+        ])
       }
       continue
     }
     // Deleted item
     if (lastIndex === -1) {
-      diff.push([now, Action.DELETE, prevIndex, node.dataset.time ?? '', node.dataset.id ?? ''])
+      diff.push([
+        now,
+        Action.DELETE,
+        prevIndex,
+        node.dataset.time ?? "",
+        node.dataset.id ?? "",
+      ])
       continue
     }
     // New item
-    if (prevIndex === -1 && (!("id" in node.dataset) || node.dataset.id === playerId.value)) {
-      diff.push([now, Action.ADD, lastIndex, node.dataset.time ?? '', node.outerHTML])
+    if (
+      prevIndex === -1 &&
+      (!("id" in node.dataset) || node.dataset.id === playerId.value)
+    ) {
+      diff.push([
+        now,
+        Action.ADD,
+        lastIndex,
+        node.dataset.time ?? "",
+        node.outerHTML,
+      ])
       continue
     }
   }

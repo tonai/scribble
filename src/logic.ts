@@ -8,14 +8,7 @@ import {
   selectWord,
   startRound,
 } from "./logic/round"
-import {
-  Action,
-  DeleteAction,
-  DiffAction,
-  Language,
-  Mode,
-  Step,
-} from "./types/logic"
+import { Action, DiffAction, Language, Mode, Step } from "./types/logic"
 
 Dusk.initLogic({
   minPlayers: 1,
