@@ -129,9 +129,9 @@ onMounted(() => {
   background-color: white;
   max-width: 100%;
   max-height: 100%;
+  position: absolute;
 }
 .hidden {
-  position: absolute;
   z-index: -1;
 }
 .enabled {
