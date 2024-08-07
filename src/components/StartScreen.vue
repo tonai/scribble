@@ -101,12 +101,12 @@ onMounted(() => {
         @click="mode(Mode.FREE, !selectedFreeMode.includes(playerId))"
       >
         <span
-          >{{ t("Free mode") }} ({{ selectedFreeMode.length }}/{{
+          >{{ t("Free mode") }}<br/>({{ selectedFreeMode.length }}/{{
             playerIds.length
           }})</span
         >
       </button>
-      <span>&nbsp;</span>
+      <div class="min hidden">{{ t('min 2') }}</div>
     </div>
     <div class="mode">
       <button
@@ -117,12 +117,12 @@ onMounted(() => {
         @click="mode(Mode.GUESS, !selectedGuessMode.includes(playerId))"
       >
         <span
-          >{{ t("Guess mode") }} ({{ selectedGuessMode.length }}/{{
+          >{{ t("Guess mode") }}<br/>({{ selectedGuessMode.length }}/{{
             playerIds.length
           }})</span
         >
       </button>
-      <span>{{ t('min 2') }}</span>
+      <div class="min">{{ t('min 2') }}</div>
     </div>
   </div>
 </template>
@@ -164,6 +164,7 @@ onMounted(() => {
 }
 .language .avatar {
   max-width: 10vw;
+  animation: 0.2s ease-in both slide-down;
 }
 .modes {
   display: flex;
@@ -177,5 +178,24 @@ onMounted(() => {
   flex: 1;
   font-size: 6vw;
   text-align: center;
+}
+.mode .button {
+  width: 100%;
+}
+.min {
+  margin-top: 3px;
+}
+.hidden {
+  opacity: 0;
+}
+@keyframes slide-down {
+  0% {
+    translate: 0 -100%;
+    opacity: 0;
+  }
+  100% {
+    translate: 0 0;
+    opacity: 1;
+  }
 }
 </style>

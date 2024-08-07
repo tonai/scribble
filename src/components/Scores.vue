@@ -16,8 +16,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="scores">
-    <div class="dialog">
+  <div class="dialog scores">
+    <div class="content">
       <div class="guessWord">{{ guessWord }}</div>
       <table>
         <tr v-for="(score, playerId) in scores" :key="playerId">
@@ -41,9 +41,6 @@ onMounted(() => {
 
 <style scoped>
 .scores {
-  position: absolute;
-  inset: 0;
-  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -53,9 +50,9 @@ onMounted(() => {
   text-align: center;
   z-index: 2;
 }
-.dialog {
+.content {
   background-color: white;
-  padding: 6vw 2vw;
+  padding: 6vw;
 }
 .guessWord {
   font-weight: bold;

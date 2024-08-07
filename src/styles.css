@@ -32,12 +32,13 @@ button {
 }
 .button {
   padding: 1vh 2vw;
-  border-width: 6px;
-  border-image: url("/border.png") 6;
   position: relative;
   background-color: transparent;
   font-size: inherit;
   color: black;
+  background-color: white;
+  transition: scale 400ms ease;
+  scale: 1;
 }
 .button span {
   position: relative;
@@ -46,16 +47,33 @@ button {
 .button:before {
   content: '';
   position: absolute;
-  inset: 0;
-  background-color: white;
+  inset: -3px;
+  border-width: 6px;
+  border-style: solid;
+  border-image: url("/border.png") 6;
 }
 .button--selected {
   border-image: url("/border-selected.png") 6;
   color: white;
+  scale: 1.1;
 }
-.button--selected:before {
+.button--selected {
   background-color: #2a2a2a;
 }
 .CHOOSE, .PLAY, .SCORES {
   background-color: grey;
+}
+.dialog {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  animation: 400ms ease-in forwards appear;
+}
+@keyframes appear {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }

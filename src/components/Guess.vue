@@ -68,6 +68,17 @@ function submit(event: Event) {
 .input {
   flex: 1;
   width: 100%;
+  border-width: 6px;
+  border-style: solid;
+  border-image: url("/border.png") 6;
+}
+.submit {
+  border-width: 6px;
+  border-style: solid;
+  border-image: url("/border.png") 6;
+}
+.submit:active {
+  scale: 1.1;
 }
 .play {
   display: flex;

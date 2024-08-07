@@ -381,6 +381,7 @@ function size(size: number) {
 .column {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
   height: 100%;
 }
@@ -393,7 +394,7 @@ function size(size: number) {
   border-radius: 50%;
   border: 1px solid black;
 }
-button:not(.button) {
+.size, .color, .brush {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -404,6 +405,8 @@ button:not(.button) {
   border: 0;
   background: transparent;
   font-size: inherit;
+  background-color: transparent;
+  transition: background-color 400ms ease;
 }
 .active {
   background-color: #2cff2c;
@@ -415,7 +418,7 @@ button:not(.button) {
   border-top: 1px solid black;
   border-left: 1px solid black;
 }
-button.color {
+.color {
   border-bottom: 1px solid black;
   border-right: 1px solid black;
 }
@@ -426,7 +429,7 @@ button.color {
   border-top: 1px solid black;
   border-left: 1px solid black;
 }
-button.brush {
+.brush {
   border-bottom: 1px solid black;
   border-right: 1px solid black;
 }

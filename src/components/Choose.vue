@@ -7,7 +7,7 @@ function choose(word: string) {
 </script>
 
 <template>
-  <div class="choose">
+  <div class="dialog choose">
     <button
       v-for="word of words"
       class="button"
@@ -22,14 +22,17 @@ function choose(word: string) {
 
 <style scoped>
 .choose {
-  position: absolute;
-  inset: 0;
-  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 5vh;
   font-size: 6vw;
+  z-index: 2;
+  padding: 0 10vw;
+}
+.button {
+  padding: 2vh 4vw;
+  width: 100%;
 }
 </style>
