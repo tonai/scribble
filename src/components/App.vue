@@ -32,17 +32,17 @@ import StartScreen from "./StartScreen.vue"
 
 onMounted(() => {
   initSounds({
-    guess: 'sound/Collect_All_Coins_Xylophone.ogg',
+    guess: "sound/Collect_Coin_Xylophone_01.ogg",
     on: "sound/Scribble-Swipe-03.mp3",
     off: "sound/Scribble-Swipe-02.mp3",
-    scores: "sound/Collect_Coin_Xylophone_01.ogg",
+    scores: "sound/Collect_All_Coins_Xylophone.ogg",
     start: ["sound/Scribble-06.mp3", "sound/Scribble-09.mp3"],
   })
 })
 
 onMounted(() => {
   Dusk.initClient({
-    onChange: ({ game, yourPlayerId }) => {
+    onChange: ({ action, game, yourPlayerId }) => {
       if (yourPlayerId && playerId.value !== yourPlayerId) {
         playerId.value = yourPlayerId
       }
@@ -51,6 +51,9 @@ onMounted(() => {
       }
       if (playersGuessed.value !== game.playersGuessed) {
         playersGuessed.value = game.playersGuessed
+        if (Object.keys(game.playersGuessed).length > 0 && game.step === Step.PLAY && action?.name === 'guess') {
+          playSound("guess")
+        }
       }
       if (playersLanguage.value !== game.playersLanguage) {
         playersLanguage.value = game.playersLanguage

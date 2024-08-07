@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { onMounted } from "vue"
 import { t } from "../helpers/i18n"
-import { playSound } from "../helpers/sound";
+import { playSound } from "../helpers/sound"
 import { gameOver, guessWord, playerId, playersReady, scores } from "../store"
 import Avatar from "./Avatar.vue"
 
@@ -18,7 +18,7 @@ onMounted(() => {
 <template>
   <div class="scores">
     <div class="dialog">
-      <div>{{  guessWord }}</div>
+      <div class="guessWord">{{ guessWord }}</div>
       <table>
         <tr v-for="(score, playerId) in scores" :key="playerId">
           <td class="cell"><Avatar :id="playerId" /></td>
@@ -56,6 +56,10 @@ onMounted(() => {
 .dialog {
   background-color: white;
   padding: 6vw 2vw;
+}
+.guessWord {
+  font-weight: bold;
+  font-size: 120%;
 }
 .cell {
   padding: 2vw 3vw;

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { compile, computed, onMounted, type Component } from "vue"
+import { compile, computed, onMounted, onUnmounted, ref, type Component } from "vue"
 import logo from "../assets/logo.png"
 import { languages } from "../constants/game"
 import { t } from "../helpers/i18n"
@@ -29,6 +29,8 @@ const flags: Record<Language, Component> = {
   pt: Pt,
   ru: Ru,
 }
+
+const music = ref<HTMLAudioElement>()
 
 const playersByLanguage = computed(() =>
   playersLanguage.value.reduce(
@@ -69,6 +71,7 @@ onMounted(() => {
 </script>
 
 <template>
+  <audio autoplay loop src="sound/loop.wav" />
   <img class="logo" alt="logo scribble" :src="logo" />
   <div class="languages">
     <div v-for="language of languages" :key="language" class="language">
