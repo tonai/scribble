@@ -409,7 +409,7 @@ function size(size: number) {
   transition: background-color 400ms ease;
 }
 .active {
-  background-color: #2cff2c;
+  background-color: #00ff00;
 }
 .colors {
   display: flex;

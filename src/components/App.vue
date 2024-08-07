@@ -22,6 +22,7 @@ import {
 } from "../store"
 import { initSounds, playSound } from "../helpers/sound"
 import { Mode, Step } from "../types/logic"
+import Alerts from "./Alerts.vue"
 import Choose from "./Choose.vue"
 import Draw from "./Draw.vue"
 import DrawControls from "./DrawControls.vue"
@@ -116,6 +117,7 @@ onMounted(() => {
       <Guess v-if="drawingPayer !== playerId && mode === Mode.GUESS" />
       <DrawControls v-if="drawingPayer === playerId || mode === Mode.FREE" />
       <Draw />
+      <Alerts v-if="mode === Mode.GUESS" />
       <Choose v-if="drawingPayer === playerId && step === Step.CHOOSE" />
     </div>
     <Header />
