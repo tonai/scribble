@@ -123,9 +123,7 @@ Dusk.initLogic({
         game.playersLanguage.splice(index, 1)
       }
       game.playersLanguage.push({ id: playerId, language })
-      if (game.playersLanguage.length === game.playerIds.length) {
-        selectLanguage(game)
-      }
+      selectLanguage(game)
     },
     mode(mode, { game, playerId }) {
       if (game.step !== Step.WAIT) {
