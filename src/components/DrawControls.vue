@@ -372,7 +372,7 @@ function size(size: number) {
   left: 0;
   right: 0;
   bottom: -3px;
-  background: center top url(/line.png) repeat-x;
+  background: center top url(/img/line.png) repeat-x;
   height: 6px;
 }
 .controls > * {

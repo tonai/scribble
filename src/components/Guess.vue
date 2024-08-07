@@ -56,7 +56,7 @@ function submit(event: Event) {
   left: 0;
   right: 0;
   bottom: -3px;
-  background: center top url(/line.png) repeat-x;
+  background: center top url(/img/line.png) repeat-x;
   height: 6px;
 }
 .form {
@@ -70,12 +70,12 @@ function submit(event: Event) {
   width: 100%;
   border-width: 6px;
   border-style: solid;
-  border-image: url("/border.png") 6;
+  border-image: url("/img/border.png") 6;
 }
 .submit {
   border-width: 6px;
   border-style: solid;
-  border-image: url("/border.png") 6;
+  border-image: url("/img/border.png") 6;
 }
 .submit:active {
   scale: 1.1;

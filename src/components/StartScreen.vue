@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { compile, computed, onMounted, onUnmounted, ref, type Component } from "vue"
+import { computed, onMounted, ref, type Component } from "vue"
 import logo from "../assets/logo.png"
 import { languages } from "../constants/game"
 import { t } from "../helpers/i18n"
@@ -74,7 +74,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <audio autoplay loop src="sound/loop.wav" />
+  <audio autoplay loop src="sound/loop.ogg" />
   <img class="logo" alt="logo scribble" :src="logo" />
   <div class="languages">
     <div v-for="language of languages" :key="language" class="language">

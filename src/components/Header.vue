@@ -34,7 +34,7 @@ import Avatar from "./Avatar.vue"
   left: 0;
   right: 0;
   top: -3px;
-  background: center bottom url(/line.png) repeat-x;
+  background: center bottom url(/img/line.png) repeat-x;
   height: 6px;
 }
 .header > * {

@@ -52,26 +52,25 @@ export function draw(drawDiff: Record<string, DiffAction[]>) {
           }
           case Action.ADD: {
             if (svg.value && id !== playerId.value) {
-              const node = createSvg(
-                tmp.value,
-                diffAction,
-                lastNodes.value,
-                lastDump.value
-              )
-              svg.value.append(node)
-            }
-            break
-          }
-          case Action.UPDATE: {
-            if (svg.value && id !== playerId.value) {
-              const node = updateSvg(
+              createSvg(
                 svg.value,
                 tmp.value,
                 diffAction,
                 lastNodes.value,
                 lastDump.value
               )
-              svg.value.append(node)
+            }
+            break
+          }
+          case Action.UPDATE: {
+            if (svg.value && id !== playerId.value) {
+              updateSvg(
+                svg.value,
+                tmp.value,
+                diffAction,
+                lastNodes.value,
+                lastDump.value
+              )
             }
             break
           }
@@ -90,18 +89,16 @@ export function draw(drawDiff: Record<string, DiffAction[]>) {
 }
 
 export function load(dumps: { dump: string; id: string; time: number }[]) {
-  if (drauu.value && tmp.value) {
+  if (drauu.value && tmp.value && svg.value) {
     for (const playerDump of dumps) {
       const { dump, id, time } = playerDump
-      const node = createSvg(
+      createSvg(
+        svg.value,
         tmp.value,
         [time, Action.ADD, String(time), String(id), dump],
         lastNodes.value,
         lastDump.value
       )
-      if (svg.value) {
-        svg.value.append(node)
-      }
     }
   }
 }
