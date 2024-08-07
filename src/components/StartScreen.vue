@@ -54,6 +54,9 @@ const selectedGuessMode = computed(() =>
 )
 
 function selectLanguage(language: Language) {
+  if (!playersByLanguage.value[language] || !playersByLanguage.value[language].includes(playerId.value)) {
+    playSound("note");
+  }
   Dusk.actions.language(language)
 }
 

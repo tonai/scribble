@@ -34,6 +34,7 @@ import StartScreen from "./StartScreen.vue"
 onMounted(() => {
   initSounds({
     guess: "sound/Collect_Coin_Xylophone_01.ogg",
+    note: "sound/note.mp3",
     on: "sound/Scribble-Swipe-03.mp3",
     off: "sound/Scribble-Swipe-02.mp3",
     scores: "sound/Collect_All_Coins_Xylophone.ogg",
