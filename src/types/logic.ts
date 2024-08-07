@@ -60,6 +60,7 @@ export interface GameState {
 }
 
 export type GameActions = {
+  back: () => void
   choose: (word: string) => void
   clear: (time: number) => void
   draw: (diff: DiffAction[]) => void

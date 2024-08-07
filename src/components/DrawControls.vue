@@ -3,6 +3,8 @@ import { onMounted, ref } from "vue"
 import { DrawingMode } from "drauu"
 import { drauu, mode } from "../store"
 import { Action, Mode } from "../types/logic"
+import { t } from "../helpers/i18n"
+import { playSound } from "../helpers/sound"
 
 const activeBrush = ref<DrawingMode | "arrow">("draw")
 const activeColor = ref<string>("#000000")
@@ -11,7 +13,7 @@ const activeSize = ref<number>(6)
 onMounted(() => {
   if (drauu.value) {
     if (drauu.value.brush.arrowEnd) {
-      activeBrush.value = 'arrow'
+      activeBrush.value = "arrow"
     } else if (drauu.value.brush.mode) {
       activeBrush.value = drauu.value.brush.mode
     }
@@ -22,7 +24,12 @@ onMounted(() => {
       activeSize.value = drauu.value.brush.size
     }
   }
-});
+})
+
+function back() {
+  playSound('button')
+  Dusk.actions.back()
+}
 
 function undo() {
   drauu.value?.undo()
@@ -67,7 +74,15 @@ function size(size: number) {
 
 <template>
   <div class="controls">
-    <div class="selected-color" :style="{ backgroundColor: activeColor }"></div>
+    <div class="column">
+      <button v-if="mode === Mode.FREE" class="button" type="button" @click="back">
+        <span>{{ t("Back") }}</span>
+      </button>
+      <div
+        class="selected-color"
+        :style="{ backgroundColor: activeColor }"
+      ></div>
+    </div>
     <div class="colors">
       <button
         class="color"
@@ -288,10 +303,22 @@ function size(size: number) {
       <button class="brush" aria-label="Clear" title="Clear" @click="clear">
         🗑
       </button>
-      <button v-if="mode === Mode.GUESS" class="brush" aria-label="Undo" title="Undo" @click="undo">
+      <button
+        v-if="mode === Mode.GUESS"
+        class="brush"
+        aria-label="Undo"
+        title="Undo"
+        @click="undo"
+      >
         ↩️
       </button>
-      <button v-if="mode === Mode.GUESS" class="brush" aria-label="Redo" title="Redo" @click="redo">
+      <button
+        v-if="mode === Mode.GUESS"
+        class="brush"
+        aria-label="Redo"
+        title="Redo"
+        @click="redo"
+      >
         ↪️
       </button>
     </div>
@@ -351,13 +378,22 @@ function size(size: number) {
 .controls > * {
   position: relative;
 }
+.column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+}
+.button {
+  margin: auto;
+}
 .selected-color {
   width: 16vw;
   height: 16vw;
   border-radius: 50%;
   border: 1px solid black;
 }
-button {
+button:not(.button) {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -379,7 +415,7 @@ button {
   border-top: 1px solid black;
   border-left: 1px solid black;
 }
-.color {
+button.color {
   border-bottom: 1px solid black;
   border-right: 1px solid black;
 }
@@ -390,7 +426,7 @@ button {
   border-top: 1px solid black;
   border-left: 1px solid black;
 }
-.brush {
+button.brush {
   border-bottom: 1px solid black;
   border-right: 1px solid black;
 }

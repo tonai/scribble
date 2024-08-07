@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import { compile, computed, type Component } from "vue"
+import { compile, computed, onMounted, type Component } from "vue"
 import logo from "../assets/logo.png"
 import { languages } from "../constants/game"
 import { t } from "../helpers/i18n"
 import {
+lastDump,
+lastNodes,
   playerId,
   playerIds,
   playersLanguage,
-  playersReady,
   selectedModes,
 } from "../store"
 import { Language, Mode } from "../types/logic"
@@ -60,6 +61,11 @@ function mode(mode: Mode, sound: boolean) {
   }
   Dusk.actions.mode(mode)
 }
+
+onMounted(() => {
+  lastDump.value = [];
+  lastNodes.value = [];
+})
 </script>
 
 <template>

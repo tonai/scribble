@@ -19,8 +19,8 @@ Dusk.initLogic({
     availableWords: words.en,
     countDown: startCountDown,
     drawingPayer: allPlayerIds[0],
-    drawDiff: {},
-    drawDump: {},
+    drawDiff: Object.fromEntries(allPlayerIds.map((id) => [id, []])),
+    drawDump: Object.fromEntries(allPlayerIds.map((id) => [id, {}])),
     gameOver: false,
     guessWord: "",
     hint: [],
@@ -38,6 +38,13 @@ Dusk.initLogic({
     words: [],
   }),
   actions: {
+    back(_, { game }) {
+      if (game.mode !== Mode.FREE) {
+        return Dusk.invalidAction()
+      }
+      game.selectedModes = {}
+      game.step = Step.WAIT
+    },
     choose(word, { game, playerId }) {
       if (
         game.step !== Step.CHOOSE ||
@@ -154,7 +161,7 @@ Dusk.initLogic({
       game.playerIds.push(playerId)
       game.scores[playerId] = 0
       game.rounds[playerId] = Math.min(...Object.values(game.rounds))
-      if (game.mode === Mode.FREE) {
+      if (game.mode !== Mode.GUESS) {
         game.drawDiff[playerId] = []
         game.drawDump[playerId] = {}
       }

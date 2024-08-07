@@ -42,7 +42,7 @@ export function selectMode(game: GameState) {
     selectWord(game)
   } else {
     game.drawDiff = Object.fromEntries(game.playerIds.map((id) => [id, []]))
-    game.drawDump = Object.fromEntries(game.playerIds.map((id) => [id, {}]))
+    // game.drawDump = Object.fromEntries(game.playerIds.map((id) => [id, {}]))
     game.step = Step.PLAY
   }
 }
