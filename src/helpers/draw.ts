@@ -11,10 +11,6 @@ export function getDiff(
     return []
   }
   const now = Date.now()
-  if (lastNodes.length === 0) {
-    Dusk.actions.clear(now)
-    return []
-  }
   const diff: DiffAction[] = []
   const all = [...new Set(prevNodes.concat(lastNodes))]
   for (const node of all) {

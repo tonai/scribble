@@ -45,7 +45,9 @@ export function draw(drawDiff: Record<string, DiffAction[]>) {
         }
         switch (action) {
           case Action.CLEAR: {
-            drauu.value.load("")
+            drauu.value.clear()
+            lastNodes.value = []
+            lastDump.value = []
             break
           }
           case Action.ADD: {
@@ -87,9 +89,7 @@ export function draw(drawDiff: Record<string, DiffAction[]>) {
   }
 }
 
-export function load(
-  dumps: { dump: string; id: string; time: number }[]
-) {
+export function load(dumps: { dump: string; id: string; time: number }[]) {
   if (drauu.value && tmp.value) {
     for (const playerDump of dumps) {
       const { dump, id, time } = playerDump

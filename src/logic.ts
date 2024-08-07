@@ -128,7 +128,7 @@ Dusk.initLogic({
       const index = game.playersLanguage.findIndex(({ id }) => id === playerId)
       // Skip if same language selected
       if (index !== -1 && language === game.playersLanguage[index].language) {
-        return;
+        return
       }
       if (index !== -1) {
         game.playersLanguage.splice(index, 1)

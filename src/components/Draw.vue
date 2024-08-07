@@ -50,8 +50,7 @@ onMounted(() => {
         (node) =>
           node instanceof SVGElement &&
           "id" in node.dataset &&
-          "time" in node.dataset /*&&
-          (!("id" in node.dataset) || node.dataset.id === playerId.value)*/
+          "time" in node.dataset
       ) as SVGElement[]
       const dump = nodes.map((node) => node.outerHTML)
       const diff = getDiff(lastNodes.value, nodes, lastDump.value, dump)

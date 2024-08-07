@@ -41,7 +41,7 @@ function redo() {
 
 function clear() {
   drauu.value?.clear()
-  Dusk.actions.draw([[Date.now(), Action.CLEAR]])
+  Dusk.actions.clear(Date.now())
 }
 
 function brush(mode: DrawingMode | "arrow") {
