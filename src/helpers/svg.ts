@@ -36,8 +36,8 @@ export function updateSvg(
     for (const attribute of node.attributes) {
       item.setAttribute(attribute.name, attribute.value)
     }
-    node.remove();
-    dumps[index] = dump;
+    node.remove()
+    dumps[index] = dump
   }
 }
 

@@ -1,14 +1,6 @@
 <script setup lang="ts">
-import { onMounted } from "vue"
 import { playerId, playerIds } from "../store"
 import Avatar from "./Avatar.vue"
-
-// onMounted(() => {
-//   // @ts-expect-error ignore
-//   navigator.virtualKeyboard.addEventListener("geometrychange", () =>
-//     alert("coucuo")
-//   )
-// })
 </script>
 
 <template>
