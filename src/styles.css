@@ -14,13 +14,13 @@ body {
   position: absolute;
   inset: 0;
   background:
-    70vw 75vh / 106px 194px url(/idea.png) no-repeat,
-    80vw 20vh / 126px 122px url(/smile.png) no-repeat,
-    center 35vh / 204px 120px url(/say.png) no-repeat,
-    5vw 65vh / 46px 56px url(/heart2.png) no-repeat,
-    20vw 80vh / 60px 96px url(/fire.png) no-repeat,
-    5vw 12vh / 80px 120px url(/spring.png) no-repeat,
-    center 55vh / 72px 76px url(/star2.png) no-repeat;
+    70vw 55vh / 106px 194px url(/idea.png) no-repeat,
+    80vw 5vh / 126px 122px url(/smile.png) no-repeat,
+    center 22vh / 204px 120px url(/say.png) no-repeat,
+    2vw 60vh / 46px 56px url(/heart2.png) no-repeat,
+    25vw 80vh / 60px 96px url(/fire.png) no-repeat,
+    5vw -2vh / 80px 120px url(/spring.png) no-repeat,
+    center 45vh / 72px 76px url(/star2.png) no-repeat;
   z-index: -1;
 }
 button {
