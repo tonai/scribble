@@ -108,14 +108,14 @@ onMounted(() => {
 
 <template>
   <div class="app" :class="Step[step]">
-    <Header />
     <StartScreen v-if="step === Step.WAIT" />
     <div v-else class="container">
-      <Draw />
-      <DrawControls v-if="drawingPayer === playerId || mode === Mode.FREE" />
-      <Choose v-if="drawingPayer === playerId && step === Step.CHOOSE" />
       <Guess v-if="drawingPayer !== playerId && mode === Mode.GUESS" />
+      <DrawControls v-if="drawingPayer === playerId || mode === Mode.FREE" />
+      <Draw />
+      <Choose v-if="drawingPayer === playerId && step === Step.CHOOSE" />
     </div>
+    <Header />
     <Scores v-if="step === Step.SCORES" />
   </div>
 </template>

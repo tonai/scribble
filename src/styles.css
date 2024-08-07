@@ -37,6 +37,7 @@ button {
   position: relative;
   background-color: transparent;
   font-size: inherit;font-size: inherit;
+  color: black;
 }
 .button span {
   position: relative;

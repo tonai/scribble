@@ -333,17 +333,18 @@ function size(size: number) {
   display: flex;
   align-items: center;
   justify-content: space-around;
-  padding: 1.5vh 0 0.5vh;
+  padding: 0.5vh 0 1.5vh;
   position: relative;
   background-color: white;
   font-size: 5vw;
+  z-index: 1;
 }
 .controls:after {
   content: "";
   position: absolute;
   left: 0;
   right: 0;
-  top: -3px;
+  bottom: -3px;
   background: center top url(/line.png) repeat-x;
   height: 6px;
 }
