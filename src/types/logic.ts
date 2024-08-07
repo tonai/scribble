@@ -30,9 +30,9 @@ export enum Action {
 }
 
 export type ClearAction = [number, Action.CLEAR]
-export type AddAction = [number, Action.ADD, number, string, string]
-export type DeleteAction = [number, Action.DELETE, number, string, string]
-export type UpdateAction = [number, Action.UPDATE, number, string, string]
+export type AddAction = [number, Action.ADD, string, string, string]
+export type DeleteAction = [number, Action.DELETE, string, string]
+export type UpdateAction = [number, Action.UPDATE, string, string, string]
 
 export type DiffAction = ClearAction | AddAction | DeleteAction | UpdateAction
 

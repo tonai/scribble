@@ -53,7 +53,6 @@ export function draw(drawDiff: Record<string, DiffAction[]>) {
               const node = createSvg(
                 tmp.value,
                 diffAction,
-                id,
                 lastNodes.value,
                 lastDump.value
               )
@@ -67,7 +66,6 @@ export function draw(drawDiff: Record<string, DiffAction[]>) {
                 svg.value,
                 tmp.value,
                 diffAction,
-                id,
                 lastNodes.value,
                 lastDump.value
               )
@@ -90,15 +88,14 @@ export function draw(drawDiff: Record<string, DiffAction[]>) {
 }
 
 export function load(
-  dumps: { dump: string; id: string; index: number; time: number }[]
+  dumps: { dump: string; id: string; time: number }[]
 ) {
   if (drauu.value && tmp.value) {
     for (const playerDump of dumps) {
-      const { dump, id, index, time } = playerDump
+      const { dump, id, time } = playerDump
       const node = createSvg(
         tmp.value,
-        [time, Action.ADD, index, String(time), dump],
-        id,
+        [time, Action.ADD, String(time), String(id), dump],
         lastNodes.value,
         lastDump.value
       )

@@ -88,16 +88,16 @@ Dusk.initLogic({
         return Dusk.invalidAction()
       }
       game.drawDiff[playerId] = diffs
-      for (const [time, action, , timeId, dumpOrId] of diffs) {
+      for (const [time, action, timeId, id, dump] of diffs) {
         switch (action) {
           case Action.DELETE:
-            delete game.drawDump[dumpOrId][timeId]
+            delete game.drawDump[id][timeId]
             break
 
           case Action.ADD:
           case Action.UPDATE:
             if (timeId) {
-              game.drawDump[playerId][timeId] = { dump: dumpOrId, time }
+              game.drawDump[id][timeId] = { dump, time }
             }
             break
         }

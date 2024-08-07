@@ -24,13 +24,13 @@ export function getDiff(
     if (prevIndex === lastIndex) {
       if (
         prevDump[prevIndex] !== lastDump[lastIndex] &&
-        (!("id" in node.dataset) || node.dataset.id === playerId.value)
+        node.dataset.id === playerId.value
       ) {
         diff.push([
           now,
           Action.UPDATE,
-          lastIndex,
           node.dataset.time ?? "",
+          node.dataset.id ?? "",
           node.outerHTML,
         ])
       }
@@ -41,22 +41,18 @@ export function getDiff(
       diff.push([
         now,
         Action.DELETE,
-        prevIndex,
         node.dataset.time ?? "",
         node.dataset.id ?? "",
       ])
       continue
     }
     // New item
-    if (
-      prevIndex === -1 &&
-      (!("id" in node.dataset) || node.dataset.id === playerId.value)
-    ) {
+    if (prevIndex === -1 && node.dataset.id === playerId.value) {
       diff.push([
         now,
         Action.ADD,
-        lastIndex,
         node.dataset.time ?? "",
+        node.dataset.id ?? "",
         node.outerHTML,
       ])
       continue

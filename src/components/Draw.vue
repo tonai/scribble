@@ -31,16 +31,15 @@ onMounted(() => {
   drauu.value = drauuInstance
   let dump = Object.entries(drawDump.value)
     .reduce(
-      (acc, [id, dumps], index) =>
+      (acc, [id, dumps]) =>
         acc.concat(
           Object.entries(dumps).map(([time, dump]) => ({
             ...dump,
             id,
-            index,
             time: Number(time),
           }))
         ),
-      [] as { dump: string; id: string; index: number; time: number }[]
+      [] as { dump: string; id: string; time: number }[]
     )
     .sort((a, b) => a.time - b.time)
   load(dump)
@@ -49,7 +48,9 @@ onMounted(() => {
     if (svg.value && drauu.value) {
       const nodes = [...svg.value.children].filter(
         (node) =>
-          node instanceof SVGElement /*&&
+          node instanceof SVGElement &&
+          "id" in node.dataset &&
+          "time" in node.dataset /*&&
           (!("id" in node.dataset) || node.dataset.id === playerId.value)*/
       ) as SVGElement[]
       const dump = nodes.map((node) => node.outerHTML)
@@ -71,18 +72,26 @@ watch(step, () => {
   }
 })
 
-function committed(node?: SVGElement) {
-  if (node) {
-    node.dataset.time = String(Date.now())
-    node.dataset.id = playerId.value
-    if (svg.value && mode.value === Mode.FREE) {
-      svg.value.append(node)
+function start() {
+  setTimeout(() => {
+    // @ts-expect-error ignore
+    const currentNode = drauu.value?._currentNode
+    if (currentNode) {
+      currentNode.dataset.time = String(Date.now())
+      currentNode.dataset.id = playerId.value
     }
+  })
+}
+
+function committed(node?: SVGElement) {
+  if (node && svg.value && mode.value === Mode.FREE) {
+    svg.value.append(node)
   }
 }
 
 onMounted(() => {
   if (drauu.value) {
+    drauu.value.on("start", start)
     drauu.value.on("committed", committed)
   }
 })
