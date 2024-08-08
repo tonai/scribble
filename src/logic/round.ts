@@ -42,7 +42,6 @@ export function selectMode(game: GameState) {
     selectWord(game)
   } else {
     game.drawDiff = Object.fromEntries(game.playerIds.map((id) => [id, []]))
-    // game.drawDump = Object.fromEntries(game.playerIds.map((id) => [id, {}]))
     game.step = Step.PLAY
   }
 }
@@ -58,8 +57,8 @@ export function selectWord(game: GameState) {
     return words[index]
   })
   game.playersGuessed = {}
-  game.drawDiff = { [game.drawingPayer]: [] }
-  game.drawDump = { [game.drawingPayer]: {} }
+  game.drawDiff = Object.fromEntries(game.playerIds.map((id) => [id, []]))
+  game.drawDump = Object.fromEntries(game.playerIds.map((id) => [id, {}]))
   game.hint = []
 }
 

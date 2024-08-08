@@ -1,30 +1,10 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue"
 import { DrawingMode } from "drauu"
 import { drauu, mode } from "../store"
-import { Action, Mode } from "../types/logic"
+import { Mode } from "../types/logic"
 import { t } from "../helpers/i18n"
 import { playSound } from "../helpers/sound"
-
-const activeBrush = ref<DrawingMode | "arrow">("draw")
-const activeColor = ref<string>("#000000")
-const activeSize = ref<number>(6)
-
-onMounted(() => {
-  if (drauu.value) {
-    if (drauu.value.brush.arrowEnd) {
-      activeBrush.value = "arrow"
-    } else if (drauu.value.brush.mode) {
-      activeBrush.value = drauu.value.brush.mode
-    }
-    if (drauu.value.brush.color) {
-      activeColor.value = drauu.value.brush.color
-    }
-    if (drauu.value.brush.size) {
-      activeSize.value = drauu.value.brush.size
-    }
-  }
-})
+import { activeBrush, activeColor, activeSize } from "../store"
 
 function back() {
   playSound('button')

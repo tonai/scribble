@@ -13,6 +13,9 @@ import {
   svg,
   step,
   tmp,
+  activeBrush,
+  activeColor,
+  activeSize,
 } from "../store"
 import { getDiff } from "../helpers/draw"
 import { Mode, Step } from "../types/logic"
@@ -23,12 +26,14 @@ onMounted(() => {
   const drauuInstance = createDrauu({
     el: svg.value,
     brush: {
-      mode: "draw",
-      color: "black",
-      size: 6,
+      arrowEnd: activeBrush.value === "arrow",
+      mode: activeBrush.value === "arrow" ? "draw" : activeBrush.value,
+      color: activeColor.value,
+      size: activeSize.value,
     },
   })
   drauu.value = drauuInstance
+
   let dump = Object.entries(drawDump.value)
     .reduce(
       (acc, [id, dumps]) =>
@@ -83,8 +88,11 @@ function start() {
 }
 
 function committed(node?: SVGElement) {
-  if (node && svg.value && mode.value === Mode.FREE) {
-    svg.value.append(node)
+  if (node) {
+    node.dataset.committed = "1"
+    if (svg.value && mode.value === Mode.FREE) {
+      svg.value.append(node)
+    }
   }
 }
 
@@ -99,7 +107,6 @@ onMounted(() => {
 <template>
   <div class="draw">
     <div class="container">
-      <svg ref="tmp" class="svg hidden"></svg>
       <svg
         ref="svg"
         class="svg"
@@ -113,6 +120,7 @@ onMounted(() => {
         }"
         viewBox="0 0 300 400"
       ></svg>
+      <svg ref="tmp" class="svg tmp" viewBox="0 0 300 400"></svg>
     </div>
   </div>
 </template>
@@ -139,8 +147,9 @@ onMounted(() => {
   max-height: 100%;
   position: absolute;
 }
-.hidden {
-  z-index: -1;
+.tmp {
+  background-color: transparent;
+  pointer-events: none;
 }
 .enabled {
   touch-action: none;

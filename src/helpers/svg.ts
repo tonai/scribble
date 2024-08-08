@@ -1,18 +1,23 @@
 import { AddAction, DeleteAction, UpdateAction } from "../types/logic"
 
-export function createSvg(
+export function createSvg(tmp: SVGSVGElement, diffAction: AddAction) {
+  const [, , , , dump] = diffAction
+  tmp.innerHTML = dump
+}
+
+export function createAndMoveSvg(
   svg: SVGSVGElement,
   tmp: SVGSVGElement,
-  diffAction: AddAction | UpdateAction,
+  diffAction: AddAction,
   nodes: SVGElement[],
   dumps: string[]
 ) {
   const [, , , , dump] = diffAction
   tmp.innerHTML = dump
-  const node = tmp.children[0] as SVGElement
-  nodes.push(node)
-  dumps.push(node.outerHTML)
-  svg.append(node)
+  const item = tmp.children[0]
+  if (item && item instanceof SVGElement) {
+    moveSvg(svg, item as SVGElement, nodes, dumps)
+  }
 }
 
 export function updateSvg(
@@ -23,22 +28,27 @@ export function updateSvg(
   dumps: string[]
 ) {
   const [, , time, id, dump] = diffAction
-  const item = [...svg.children].find(
+  tmp.innerHTML = dump
+  const item = [...tmp.children].find(
     (el) =>
       el instanceof SVGElement &&
       el.dataset.id === id &&
       el.dataset.time === time
   )
-  if (item) {
-    const index = nodes.indexOf(item as SVGElement)
-    tmp.innerHTML = dump
-    const node = tmp.children[0] as SVGElement
-    for (const attribute of node.attributes) {
-      item.setAttribute(attribute.name, attribute.value)
-    }
-    node.remove()
-    dumps[index] = dump
+  if (item && item instanceof SVGElement && item.dataset.committed === "1") {
+    moveSvg(svg, item as SVGElement, nodes, dumps)
   }
+}
+
+export function moveSvg(
+  svg: SVGSVGElement,
+  item: SVGElement,
+  nodes: SVGElement[],
+  dumps: string[]
+) {
+  nodes.push(item as SVGElement)
+  dumps.push(item.outerHTML)
+  svg.append(item)
 }
 
 export function removeSvg(

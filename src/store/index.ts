@@ -1,8 +1,13 @@
-import { Drauu } from "drauu"
+import { Drauu, DrawingMode } from "drauu"
 import { ref } from "vue"
 import { startCountDown } from "../constants/game"
 import { Action, DiffAction, Language, Mode, Step } from "../types/logic"
-import { createSvg, removeSvg, updateSvg } from "../helpers/svg"
+import {
+  createAndMoveSvg,
+  createSvg,
+  removeSvg,
+  updateSvg,
+} from "../helpers/svg"
 
 export const countDown = ref(startCountDown)
 export const drauu = ref<Drauu>()
@@ -25,6 +30,10 @@ export const selectedModes = ref<Record<string, Mode>>({})
 export const step = ref(Step.WAIT)
 export const words = ref<string[]>([])
 
+export const activeBrush = ref<DrawingMode | "arrow">("draw")
+export const activeColor = ref<string>("#000000")
+export const activeSize = ref<number>(6)
+
 export const svg = ref<SVGSVGElement>()
 export const tmp = ref<SVGSVGElement>()
 export const lastTime = ref(0)
@@ -33,9 +42,7 @@ export const lastNodes = ref<SVGElement[]>([])
 
 export function draw(drawDiff: Record<string, DiffAction[]>) {
   if (drauu.value && tmp.value) {
-    const entries = Object.entries(drawDiff) /*.filter(
-      ([id]) => id !== playerId.value
-    )*/
+    const entries = Object.entries(drawDiff)
     let nextTime = 0
     for (const [id, actions] of entries) {
       for (const diffAction of actions) {
@@ -52,13 +59,7 @@ export function draw(drawDiff: Record<string, DiffAction[]>) {
           }
           case Action.ADD: {
             if (svg.value && id !== playerId.value) {
-              createSvg(
-                svg.value,
-                tmp.value,
-                diffAction,
-                lastNodes.value,
-                lastDump.value
-              )
+              createSvg(tmp.value, diffAction)
             }
             break
           }
@@ -92,7 +93,7 @@ export function load(dumps: { dump: string; id: string; time: number }[]) {
   if (drauu.value && tmp.value && svg.value) {
     for (const playerDump of dumps) {
       const { dump, id, time } = playerDump
-      createSvg(
+      createAndMoveSvg(
         svg.value,
         tmp.value,
         [time, Action.ADD, String(time), String(id), dump],

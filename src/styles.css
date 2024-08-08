@@ -40,6 +40,9 @@ button {
   transition: scale 400ms ease;
   scale: 1;
 }
+.button:disabled {
+  color: grey;
+}
 .button span {
   position: relative;
   z-index: 1;

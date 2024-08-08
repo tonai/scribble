@@ -70,15 +70,9 @@ Dusk.initLogic({
       ) {
         return Dusk.invalidAction()
       }
-      if (game.mode === Mode.GUESS) {
-        game.drawDiff = { [game.drawingPayer]: [[time, Action.CLEAR]] }
-        game.drawDump = { [game.drawingPayer]: {} }
-      } else {
-        game.drawDiff = Object.fromEntries(
-          game.playerIds.map((id) => [id, [[time, Action.CLEAR]]])
-        )
-        game.drawDump = Object.fromEntries(game.playerIds.map((id) => [id, {}]))
-      }
+      game.drawDiff = Object.fromEntries(game.playerIds.map((id) => [id, []]))
+      game.drawDump = Object.fromEntries(game.playerIds.map((id) => [id, {}]))
+      game.drawDiff[playerId] = [[time, Action.CLEAR]]
     },
     draw(diffs: DiffAction[], { game, playerId }) {
       if (
@@ -107,7 +101,7 @@ Dusk.initLogic({
       if (game.step !== Step.PLAY || playerId in game.playersGuessed) {
         return Dusk.invalidAction()
       }
-      if (word.toLowerCase() === game.guessWord.toLowerCase()) {
+      if (word.toLowerCase().trim() === game.guessWord.toLowerCase()) {
         // console.log(playerId, 'guessed the word')
         const time = startCountDown * 1000 - (Dusk.gameTime() - game.startTime)
         const score = getScore(time)
@@ -165,10 +159,8 @@ Dusk.initLogic({
       game.playerIds.push(playerId)
       game.scores[playerId] = 0
       game.rounds[playerId] = Math.min(...Object.values(game.rounds))
-      if (game.mode !== Mode.GUESS) {
-        game.drawDiff[playerId] = []
-        game.drawDump[playerId] = {}
-      }
+      game.drawDiff[playerId] = []
+      game.drawDump[playerId] = {}
     },
     playerLeft(playerId, { game }) {
       game.playerIds.splice(game.playerIds.indexOf(playerId), 1)
