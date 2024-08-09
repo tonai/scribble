@@ -1,8 +1,18 @@
 import { AddAction, DeleteAction, UpdateAction } from "../types/logic"
 
-export function createSvg(tmp: SVGSVGElement, diffAction: AddAction) {
+export function createSvg(
+  svg: SVGSVGElement,
+  tmp: SVGSVGElement,
+  diffAction: AddAction,
+  nodes: SVGElement[],
+  dumps: string[]
+) {
   const [, , , , dump] = diffAction
   tmp.innerHTML = dump
+  const item = tmp.children[0]
+  if (item && item instanceof SVGElement && item.dataset.committed === "1") {
+    moveSvg(svg, item as SVGElement, nodes, dumps)
+  }
 }
 
 export function createAndMoveSvg(

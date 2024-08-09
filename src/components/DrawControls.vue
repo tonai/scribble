@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DrawingMode } from "drauu"
-import { drauu, mode } from "../store"
+import { clear, drauu, mode } from "../store"
 import { Mode } from "../types/logic"
 import { t } from "../helpers/i18n"
 import { playSound } from "../helpers/sound"
@@ -19,8 +19,8 @@ function redo() {
   drauu.value?.redo()
 }
 
-function clear() {
-  drauu.value?.clear()
+function handleClear() {
+  clear()
   Dusk.actions.clear(Date.now())
 }
 
@@ -280,7 +280,7 @@ function size(size: number) {
       >
         ○
       </button>
-      <button class="brush" aria-label="Clear" title="Clear" @click="clear">
+      <button class="brush" aria-label="Clear" title="Clear" @click="handleClear">
         🗑
       </button>
       <button

@@ -2,6 +2,7 @@
 import { onMounted, onUnmounted, ref, watch } from "vue"
 import { createDrauu } from "drauu"
 import {
+  clear,
   drauu,
   drawDump,
   drawingPayer,
@@ -59,7 +60,9 @@ onMounted(() => {
       ) as SVGElement[]
       const dump = nodes.map((node) => node.outerHTML)
       const diff = getDiff(lastNodes.value, nodes, lastDump.value, dump)
-      Dusk.actions.draw(diff)
+      if (diff.length > 0) {
+        Dusk.actions.draw(diff)
+      }
       lastNodes.value = nodes
       lastDump.value = dump
     }
@@ -71,8 +74,8 @@ onUnmounted(() => {
 })
 
 watch(step, () => {
-  if (step.value === Step.CHOOSE && drauu.value) {
-    drauu.value.clear()
+  if (step.value === Step.CHOOSE) {
+    clear()
   }
 })
 

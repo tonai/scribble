@@ -50,16 +50,21 @@ export function draw(drawDiff: Record<string, DiffAction[]>) {
         if (time <= lastTime.value) {
           continue
         }
+        console.log(diffAction)
         switch (action) {
           case Action.CLEAR: {
-            drauu.value.clear()
-            lastNodes.value = []
-            lastDump.value = []
+            clear()
             break
           }
           case Action.ADD: {
             if (svg.value && id !== playerId.value) {
-              createSvg(tmp.value, diffAction)
+              createSvg(
+                svg.value,
+                tmp.value,
+                diffAction,
+                lastNodes.value,
+                lastDump.value
+              )
             }
             break
           }
@@ -78,6 +83,9 @@ export function draw(drawDiff: Record<string, DiffAction[]>) {
           case Action.DELETE: {
             if (svg.value) {
               removeSvg(svg.value, diffAction, lastNodes.value, lastDump.value)
+            }
+            if (tmp.value) {
+              removeSvg(tmp.value, diffAction, lastNodes.value, lastDump.value)
             }
             break
           }
@@ -102,4 +110,15 @@ export function load(dumps: { dump: string; id: string; time: number }[]) {
       )
     }
   }
+}
+
+export function clear() {
+  if (drauu.value) {
+    drauu.value.clear()
+  }
+  if (tmp.value) {
+    tmp.value.innerHTML = ""
+  }
+  lastNodes.value = []
+  lastDump.value = []
 }

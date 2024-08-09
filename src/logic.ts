@@ -157,18 +157,23 @@ Dusk.initLogic({
   events: {
     playerJoined(playerId, { game }) {
       game.playerIds.push(playerId)
-      game.scores[playerId] = 0
+      game.scores[playerId] = game.scores[playerId] ?? 0
       game.rounds[playerId] = Math.min(...Object.values(game.rounds))
       game.drawDiff[playerId] = []
       game.drawDump[playerId] = {}
     },
     playerLeft(playerId, { game }) {
       game.playerIds.splice(game.playerIds.indexOf(playerId), 1)
-      game.playersReady.splice(game.playersReady.indexOf(playerId), 1)
-      game.playersLanguage.splice(
-        game.playersLanguage.findIndex(({ id }) => id === playerId),
-        1
+      const readyIndex = game.playersReady.indexOf(playerId)
+      if (readyIndex > -1) {
+        game.playersReady.splice(readyIndex, 1)
+      }
+      const languageIndex = game.playersLanguage.findIndex(
+        ({ id }) => id === playerId
       )
+      if (languageIndex > -1) {
+        game.playersLanguage.splice(languageIndex, 1)
+      }
       if (game.mode === Mode.GUESS) {
         if (game.step === Step.CHOOSE && playerId === game.drawingPayer) {
           selectWord(game)
