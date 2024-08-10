@@ -31,7 +31,7 @@ function submit(event: Event) {
   <div class="guess">
     <form v-if="step === Step.PLAY && !(playerId in playersGuessed)" class="form" @submit="submit">
       <input class="input button" v-model="guess" />
-      <input class="submit button" type="submit" value="Guess" />
+      <input class="submit button" type="submit" :value="t('Guess')" />
     </form>
     <div v-if="step === Step.CHOOSE">{{ t('Waiting...') }}</div>
     <div v-if="step === Step.PLAY && mode === Mode.GUESS" class="play">

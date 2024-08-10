@@ -30,8 +30,6 @@ const flags: Record<Language, Component> = {
   ru: Ru,
 }
 
-const music = ref<HTMLAudioElement>()
-
 const playersByLanguage = computed(() =>
   playersLanguage.value.reduce(
     (acc, { id, language }) => {
@@ -74,7 +72,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <audio autoplay loop src="sound/loop.ogg" />
+  <audio autoplay loop src="sound/loop.mp3" />
   <img class="logo" alt="logo scribble" :src="logo" />
   <div class="languages">
     <div v-for="language of languages" :key="language" class="language">

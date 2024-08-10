@@ -9,6 +9,7 @@ export const translations: Record<Language, Record<string, string>> = {
     "Waiting...": "Waiting...",
     Back: "Back",
     "guessed the word": "guessed the word",
+    Guess: "Guess",
   },
   fr: {
     Ready: "Prêt",
@@ -18,6 +19,7 @@ export const translations: Record<Language, Record<string, string>> = {
     "Waiting...": "En attente...",
     Back: "Retour",
     "guessed the word": "a deviné le mot",
+    Guess: "Deviner",
   },
   ru: {
     Ready: "Готовый",
@@ -27,6 +29,7 @@ export const translations: Record<Language, Record<string, string>> = {
     "Waiting...": "Ожидающий...",
     Back: "Назад",
     "guessed the word": "догадал слово",
+    Guess: "Предполагать",
   },
   es: {
     Ready: "Listo",
@@ -36,6 +39,7 @@ export const translations: Record<Language, Record<string, string>> = {
     "Waiting...": "Espera...",
     Back: "Atrás",
     "guessed the word": "adivinó la palabra",
+    Guess: "Adivinar",
   },
   pt: {
     Ready: "Preparar",
@@ -45,6 +49,7 @@ export const translations: Record<Language, Record<string, string>> = {
     "Waiting...": "Espera...",
     Back: "Voltar",
     "guessed the word": "adivinhou a palavra",
+    Guess: "Adivinhar",
   },
   cn: {
     Ready: "准备好",
@@ -54,5 +59,6 @@ export const translations: Record<Language, Record<string, string>> = {
     "Waiting...": "等待...",
     Back: "后退",
     "guessed the word": "猜到了这个词",
+    Guess: "猜测",
   },
 }
