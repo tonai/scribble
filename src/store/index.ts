@@ -9,6 +9,8 @@ import {
   updateSvg,
 } from "../helpers/svg"
 
+export const debugMessages = ref<string[]>([])
+
 export const countDown = ref(startCountDown)
 export const drauu = ref<Drauu>()
 export const drawDump = ref<
@@ -36,21 +38,20 @@ export const activeSize = ref<number>(6)
 
 export const svg = ref<SVGSVGElement>()
 export const tmp = ref<SVGSVGElement>()
-export const lastTime = ref(0)
+export const lastTime = ref<Record<string, number>>({})
 export const lastDump = ref<string[]>([])
 export const lastNodes = ref<SVGElement[]>([])
 
 export function draw(drawDiff: Record<string, DiffAction[]>) {
   if (drauu.value && tmp.value) {
     const entries = Object.entries(drawDiff)
-    let nextTime = 0
     for (const [id, actions] of entries) {
+      let nextTime = 0
       for (const diffAction of actions) {
         const [time, action] = diffAction
-        if (time <= lastTime.value) {
+        if (lastTime.value[id] && time <= lastTime.value[id]) {
           continue
         }
-        console.log(diffAction)
         switch (action) {
           case Action.CLEAR: {
             clear()
@@ -92,8 +93,8 @@ export function draw(drawDiff: Record<string, DiffAction[]>) {
         }
         nextTime = Math.max(nextTime, time)
       }
+      lastTime.value[id] = Math.max(lastTime.value[id] || 0, nextTime)
     }
-    lastTime.value = Math.max(lastTime.value, nextTime)
   }
 }
 

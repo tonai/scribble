@@ -118,7 +118,7 @@ onMounted(() => {
       <Guess v-if="drawingPayer !== playerId && mode === Mode.GUESS" />
       <DrawControls v-if="drawingPayer === playerId || mode === Mode.FREE" />
       <Draw />
-      <Alerts v-if="mode === Mode.GUESS" />
+      <Alerts />
       <Choose v-if="drawingPayer === playerId && step === Step.CHOOSE" />
     </div>
     <Header />

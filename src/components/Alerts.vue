@@ -1,14 +1,25 @@
 <script setup lang="ts">
-import { computed } from 'vue';
-import { t } from '../helpers/i18n'
-import { drawingPayer, playersGuessed } from '../store'
+import { computed } from "vue"
+import { t } from "../helpers/i18n"
+import { debugMessages, drawingPayer, playersGuessed } from "../store"
 
-const alerts = computed(() => Object.keys(playersGuessed.value).filter((id) => id !== drawingPayer.value))
+const alerts = computed(() =>
+  debugMessages.value.concat(
+    Object.keys(playersGuessed.value)
+      .filter((id) => id !== drawingPayer.value)
+      .map((id) => {
+        const player = Dusk.getPlayerInfo(id);
+        return `${player.displayName} ${t("guessed the word")}`
+      })
+  )
+)
 </script>
 
 <template>
   <ul class="alerts">
-    <li v-for="alert of alerts" :key="alert" class="alert">{{ alert }} {{ t("guessed the word") }}</li>
+    <li v-for="alert of alerts" :key="alert" class="alert">
+      {{ alert }}
+    </li>
   </ul>
 </template>
 

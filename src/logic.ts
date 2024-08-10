@@ -102,7 +102,6 @@ Dusk.initLogic({
         return Dusk.invalidAction()
       }
       if (word.toLowerCase().trim() === game.guessWord.toLowerCase()) {
-        // console.log(playerId, 'guessed the word')
         const time = startCountDown * 1000 - (Dusk.gameTime() - game.startTime)
         const score = getScore(time)
         game.playersGuessed[playerId] = score
