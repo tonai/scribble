@@ -56,7 +56,7 @@ onMounted(() => {
 }
 .guessWord {
   font-weight: bold;
-  font-size: 120%;
+  font-size: 105%;
 }
 .cell {
   padding: 2vw 3vw;

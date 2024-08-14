@@ -83,11 +83,13 @@ function submit(event: Event) {
 .play {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 0 5vw;
   height: 3vh;
   font-size: 6vw;
 }
 .hint {
   letter-spacing: 2px;
+  font-size: 4.6vw;
 }
 </style>

@@ -112,7 +112,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="app" :class="Step[step]">
+  <div class="app" :class="[Step[step], mode]">
     <StartScreen v-if="step === Step.WAIT" />
     <div v-else class="container">
       <Guess v-if="drawingPayer !== playerId && mode === Mode.GUESS" />

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DrawingMode } from "drauu"
-import { clear, drauu, mode } from "../store"
+import { clear, drauu, guessWord, mode } from "../store"
 import { Mode } from "../types/logic"
 import { t } from "../helpers/i18n"
 import { playSound } from "../helpers/sound"
@@ -55,17 +55,17 @@ function size(size: number) {
 <template>
   <div class="controls">
     <div class="column">
-      <button v-if="mode === Mode.FREE" class="button" type="button" @click="back">
-        <span>{{ t("Back") }}</span>
-      </button>
       <div
         class="selected-color"
         :style="{ backgroundColor: activeColor }"
       ></div>
+      <button v-if="mode === Mode.FREE" class="button" type="button" @click="back">
+        <span>{{ t("Back") }}</span>
+      </button>
     </div>
     <div class="colors">
       <button
-        class="color"
+        class="color top left"
         :class="{ active: activeColor === '#ffffff' }"
         style="background-color: #ffffff"
         aria-label="White"
@@ -73,7 +73,7 @@ function size(size: number) {
         @click="color('#ffffff')"
       ></button>
       <button
-        class="color"
+        class="color top"
         :class="{ active: activeColor === '#ef130b' }"
         style="background-color: #ef130b"
         aria-label="Red"
@@ -81,7 +81,7 @@ function size(size: number) {
         @click="color('#ef130b')"
       ></button>
       <button
-        class="color"
+        class="color top"
         :class="{ active: activeColor === '#ff7100' }"
         style="background-color: #ff7100"
         aria-label="Orange"
@@ -89,7 +89,7 @@ function size(size: number) {
         @click="color('#ff7100')"
       ></button>
       <button
-        class="color"
+        class="color top"
         :class="{ active: activeColor === '#ffe400' }"
         style="background-color: #ffe400"
         aria-label="Yellow"
@@ -97,19 +97,61 @@ function size(size: number) {
         @click="color('#ffe400')"
       ></button>
       <button
-        class="color"
+        class="color top"
         :class="{ active: activeColor === '#00cc00' }"
         style="background-color: #00cc00"
         aria-label="Green"
         title="Green"
         @click="color('#00cc00')"
       ></button>
+
       <button
-        class="color"
+        class="color top"
+        :class="{ active: activeColor === '#00b2ff' }"
+        style="background-color: #00b2ff"
+        aria-label="Blue"
+        title="Blue"
+        @click="color('#00b2ff')"
+      ></button>
+      <button
+        class="color top"
+        :class="{ active: activeColor === '#231fd3' }"
+        style="background-color: #231fd3"
+        aria-label="Blue"
+        title="Blue"
+        @click="color('#231fd3')"
+      ></button>
+      <button
+        class="color top"
+        :class="{ active: activeColor === '#a300ba' }"
+        style="background-color: #a300ba"
+        aria-label="Purple"
+        title="Purple"
+        @click="color('#a300ba')"
+      ></button>
+      <button
+        class="color top"
+        :class="{ active: activeColor === '#d37caa' }"
+        style="background-color: #d37caa"
+        aria-label="Pink"
+        title="Pink"
+        @click="color('#d37caa')"
+      ></button>
+      <button
+        class="color top"
+        :class="{ active: activeColor === '#a0522d' }"
+        style="background-color: #a0522d"
+        aria-label="Brown"
+        title="Brown"
+        @click="color('#a0522d')"
+      ></button>
+
+      <button
+        class="color left"
         :class="{ active: activeColor === '#000000' }"
         style="background-color: #000000"
-        aria-label="White"
-        title="White"
+        aria-label="Black"
+        title="Black"
         @click="color('#000000')"
       ></button>
       <button
@@ -144,46 +186,7 @@ function size(size: number) {
         title="Dark Green"
         @click="color('#005510')"
       ></button>
-      <button
-        class="color"
-        :class="{ active: activeColor === '#00b2ff' }"
-        style="background-color: #00b2ff"
-        aria-label="Blue"
-        title="Blue"
-        @click="color('#00b2ff')"
-      ></button>
-      <button
-        class="color"
-        :class="{ active: activeColor === '#231fd3' }"
-        style="background-color: #231fd3"
-        aria-label="Blue"
-        title="Blue"
-        @click="color('#231fd3')"
-      ></button>
-      <button
-        class="color"
-        :class="{ active: activeColor === '#a300ba' }"
-        style="background-color: #a300ba"
-        aria-label="Purple"
-        title="Purple"
-        @click="color('#a300ba')"
-      ></button>
-      <button
-        class="color"
-        :class="{ active: activeColor === '#d37caa' }"
-        style="background-color: #d37caa"
-        aria-label="Pink"
-        title="Pink"
-        @click="color('#d37caa')"
-      ></button>
-      <button
-        class="color"
-        :class="{ active: activeColor === '#a0522d' }"
-        style="background-color: #a0522d"
-        aria-label="Brown"
-        title="Brown"
-        @click="color('#a0522d')"
-      ></button>
+      
       <button
         class="color"
         :class="{ active: activeColor === '#00569e' }"
@@ -224,10 +227,9 @@ function size(size: number) {
         title="Dark Brown"
         @click="color('#63300d')"
       ></button>
-    </div>
-    <div class="brushes">
+
       <button
-        class="brush"
+        class="brush left"
         :class="{ active: activeBrush === 'draw' }"
         aria-label="Draw"
         title="Draw"
@@ -280,7 +282,8 @@ function size(size: number) {
       >
         ○
       </button>
-      <button class="brush" aria-label="Clear" title="Clear" @click="handleClear">
+
+      <button class="brush space" aria-label="Clear" title="Clear" @click="handleClear">
         🗑
       </button>
       <button
@@ -302,20 +305,15 @@ function size(size: number) {
         ↪️
       </button>
     </div>
-    <div class="sizes">
+    <div class="bottom">
+      <div class="word">{{  guessWord }}</div>
+
       <button
-        class="size size--xl"
-        :class="{ active: activeSize === 40 }"
-        aria-label="Extra Large"
-        title="Extra Large"
-        @click="size(40)"
-      ></button>
-      <button
-        class="size size--large"
-        :class="{ active: activeSize === 12 }"
-        aria-label="Large"
-        title="Large"
-        @click="size(12)"
+        class="size size--small"
+        :class="{ active: activeSize === 2 }"
+        aria-label="Small"
+        title="Small"
+        @click="size(2)"
       ></button>
       <button
         class="size size--medium"
@@ -325,11 +323,18 @@ function size(size: number) {
         @click="size(6)"
       ></button>
       <button
-        class="size size--small"
-        :class="{ active: activeSize === 2 }"
-        aria-label="Small"
-        title="Small"
-        @click="size(2)"
+        class="size size--large"
+        :class="{ active: activeSize === 12 }"
+        aria-label="Large"
+        title="Large"
+        @click="size(12)"
+      ></button>
+      <button
+        class="size size--xl"
+        :class="{ active: activeSize === 40 }"
+        aria-label="Extra Large"
+        title="Extra Large"
+        @click="size(40)"
       ></button>
     </div>
   </div>
@@ -338,7 +343,8 @@ function size(size: number) {
 <style scoped>
 .controls {
   display: flex;
-  align-items: center;
+  flex-wrap: wrap;
+  align-items: flex-start;
   justify-content: space-around;
   padding: 0.5vh 0 1.5vh;
   position: relative;
@@ -361,9 +367,9 @@ function size(size: number) {
 .column {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
-  height: 100%;
+  height: 32vw;
 }
 .button {
   margin: auto;
@@ -394,60 +400,78 @@ function size(size: number) {
 .colors {
   display: flex;
   flex-wrap: wrap;
-  width: 40vw;
+  width: 80vw;
+}
+.top {
   border-top: 1px solid black;
+}
+.left {
   border-left: 1px solid black;
 }
 .color {
   border-bottom: 1px solid black;
   border-right: 1px solid black;
 }
-.brushes {
-  display: flex;
-  flex-wrap: wrap;
-  width: 24vw;
-  border-top: 1px solid black;
-  border-left: 1px solid black;
-}
 .brush {
   border-bottom: 1px solid black;
   border-right: 1px solid black;
 }
-.sizes {
+.space {
+  margin-left: calc(8vw - 1px);
+  border-left: 1px solid black;
+  width: calc(8vw + 1px)
+}
+.free .space {
+  margin-left: calc(24vw - 1px);
+}
+.bottom {
   display: flex;
-  flex-wrap: wrap;
-  width: 8vw;
+  width: 98vw;
+  position: absolute;
+  bottom: 2vw;
+}
+.free .bottom {
+  width: 82vw;
+  margin-left: 16vw;
 }
 .size--small:before {
   content: "";
   display: block;
-  height: 2vw;
-  width: 2vw;
+  height: 1vw;
+  width: 1vw;
   background-color: black;
   border-radius: 50%;
 }
 .size--medium:before {
   content: "";
   display: block;
-  height: 4vw;
-  width: 4vw;
+  height: 3vw;
+  width: 3vw;
   background-color: black;
   border-radius: 50%;
 }
 .size--large:before {
   content: "";
   display: block;
-  height: 6vw;
-  width: 6vw;
+  height: 5vw;
+  width: 5vw;
   background-color: black;
   border-radius: 50%;
 }
 .size--xl:before {
   content: "";
   display: block;
-  height: 8vw;
-  width: 8vw;
+  height: 7.8vw;
+  width: 7.8vw;
   background-color: black;
   border-radius: 50%;
+}
+.word {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 5vw;
+  text-decoration: underline;
 }
 </style>
