@@ -11,7 +11,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "drauu": "^0.4.0",
+    "drauu": "^0.4.1",
     "dusk-games-sdk": "^4.21.1",
     "vue": "^3.4.35"
   },

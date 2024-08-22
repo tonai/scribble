@@ -43,7 +43,7 @@ export const lastDump = ref<string[]>([])
 export const lastNodes = ref<SVGElement[]>([])
 
 export function draw(drawDiff: Record<string, DiffAction[]>) {
-  if (drauu.value && tmp.value) {
+  if (svg.value && tmp.value) {
     const entries = Object.entries(drawDiff)
     for (const [id, actions] of entries) {
       let nextTime = 0
@@ -58,7 +58,7 @@ export function draw(drawDiff: Record<string, DiffAction[]>) {
             break
           }
           case Action.ADD: {
-            if (svg.value && id !== playerId.value) {
+            if (id !== playerId.value) {
               createSvg(
                 svg.value,
                 tmp.value,
@@ -70,7 +70,7 @@ export function draw(drawDiff: Record<string, DiffAction[]>) {
             break
           }
           case Action.UPDATE: {
-            if (svg.value && id !== playerId.value) {
+            if (id !== playerId.value) {
               updateSvg(
                 svg.value,
                 tmp.value,
@@ -82,12 +82,8 @@ export function draw(drawDiff: Record<string, DiffAction[]>) {
             break
           }
           case Action.DELETE: {
-            if (svg.value) {
-              removeSvg(svg.value, diffAction, lastNodes.value, lastDump.value)
-            }
-            if (tmp.value) {
-              removeSvg(tmp.value, diffAction, lastNodes.value, lastDump.value)
-            }
+            removeSvg(svg.value, diffAction, lastNodes.value, lastDump.value)
+            removeSvg(tmp.value, diffAction, lastNodes.value, lastDump.value)
             break
           }
         }
