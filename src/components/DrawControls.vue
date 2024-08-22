@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { DrawingMode } from "drauu"
-import { clear, drauu, guessWord, mode } from "../store"
+import { canRedo, canUndo, clear, drauu, guessWord, mode } from "../store"
 import { Mode } from "../types/logic"
 import { t } from "../helpers/i18n"
 import { playSound } from "../helpers/sound"
 import { activeBrush, activeColor, activeSize } from "../store"
 
 function back() {
-  playSound('button')
+  playSound("button")
   Dusk.actions.back()
 }
 
@@ -59,7 +59,12 @@ function size(size: number) {
         class="selected-color"
         :style="{ backgroundColor: activeColor }"
       ></div>
-      <button v-if="mode === Mode.FREE" class="button" type="button" @click="back">
+      <button
+        v-if="mode === Mode.FREE"
+        class="button"
+        type="button"
+        @click="back"
+      >
         <span>{{ t("Back") }}</span>
       </button>
     </div>
@@ -186,7 +191,7 @@ function size(size: number) {
         title="Dark Green"
         @click="color('#005510')"
       ></button>
-      
+
       <button
         class="color"
         :class="{ active: activeColor === '#00569e' }"
@@ -230,6 +235,34 @@ function size(size: number) {
 
       <button
         class="brush left"
+        aria-label="Clear"
+        title="Clear"
+        @click="handleClear"
+      >
+        🗑
+      </button>
+      <button
+        class="brush"
+        :disabled="!canUndo"
+        aria-label="Undo"
+        title="Undo"
+        @click="undo"
+      >
+        ↩️
+      </button>
+      <button
+        v-if="mode !== Mode.FREE"
+        :disabled="!canRedo"
+        class="brush"
+        aria-label="Redo"
+        title="Redo"
+        @click="redo"
+      >
+        ↪️
+      </button>
+
+      <button
+        class="brush space"
         :class="{ active: activeBrush === 'draw' }"
         aria-label="Draw"
         title="Draw"
@@ -283,70 +316,52 @@ function size(size: number) {
         ○
       </button>
 
-      <button class="brush space" aria-label="Clear" title="Clear" @click="handleClear">
-        🗑
-      </button>
-      <button
-        v-if="mode === Mode.GUESS"
-        class="brush"
-        aria-label="Undo"
-        title="Undo"
-        @click="undo"
-      >
-        ↩️
-      </button>
-      <button
-        v-if="mode === Mode.GUESS"
-        class="brush"
-        aria-label="Redo"
-        title="Redo"
-        @click="redo"
-      >
-        ↪️
-      </button>
-    </div>
-    <div class="bottom">
-      <div class="word">{{  guessWord }}</div>
+      <div class="bottom">
+        <div class="word">{{ guessWord }}</div>
 
-      <button
-        class="size size--small"
-        :class="{ active: activeSize === 2 }"
-        aria-label="Small"
-        title="Small"
-        @click="size(2)"
-      ></button>
-      <button
-        class="size size--medium"
-        :class="{ active: activeSize === 6 }"
-        aria-label="Medium"
-        title="Medium"
-        @click="size(6)"
-      ></button>
-      <button
-        class="size size--large"
-        :class="{ active: activeSize === 12 }"
-        aria-label="Large"
-        title="Large"
-        @click="size(12)"
-      ></button>
-      <button
-        class="size size--xl"
-        :class="{ active: activeSize === 40 }"
-        aria-label="Extra Large"
-        title="Extra Large"
-        @click="size(40)"
-      ></button>
+        <button
+          class="size size--small left"
+          :class="{ active: activeSize === 2 }"
+          aria-label="Small"
+          title="Small"
+          @click="size(2)"
+        ></button>
+        <button
+          class="size size--medium"
+          :class="{ active: activeSize === 6 }"
+          aria-label="Medium"
+          title="Medium"
+          @click="size(6)"
+        ></button>
+        <button
+          class="size size--large"
+          :class="{ active: activeSize === 12 }"
+          aria-label="Large"
+          title="Large"
+          @click="size(12)"
+        ></button>
+        <button
+          class="size size--xl"
+          :class="{ active: activeSize === 40 }"
+          aria-label="Extra Large"
+          title="Extra Large"
+          @click="size(40)"
+        ></button>
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
 .controls {
+  --size: 7.8vw;
+  --margin: 1vw;
+  --padding: 0.5vh;
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
-  justify-content: space-around;
-  padding: 0.5vh 0 1.5vh;
+  justify-content: center;
+  padding: 0.5vh 0 var(--padding);
   position: relative;
   background-color: white;
   font-size: 5vw;
@@ -370,22 +385,25 @@ function size(size: number) {
   justify-content: flex-start;
   align-items: center;
   height: 32vw;
+  margin-right: var(--margin);
 }
 .button {
   margin: auto;
 }
 .selected-color {
-  width: 16vw;
-  height: 16vw;
+  width: calc(var(--size) * 2);
+  height: calc(var(--size) * 2);
   border-radius: 50%;
   border: 1px solid black;
 }
-.size, .color, .brush {
+.size,
+.color,
+.brush {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 8vw;
-  height: 8vw;
+  width: var(--size);
+  height: var(--size);
   padding: 0;
   margin: 0;
   border: 0;
@@ -400,7 +418,7 @@ function size(size: number) {
 .colors {
   display: flex;
   flex-wrap: wrap;
-  width: 80vw;
+  width: calc(var(--size) * 10);
 }
 .top {
   border-top: 1px solid black;
@@ -408,61 +426,62 @@ function size(size: number) {
 .left {
   border-left: 1px solid black;
 }
-.color {
-  border-bottom: 1px solid black;
-  border-right: 1px solid black;
+.size.left {
+  width: calc(var(--size) + 1px);
 }
-.brush {
+.color,
+.brush,
+.size {
   border-bottom: 1px solid black;
   border-right: 1px solid black;
 }
 .space {
-  margin-left: calc(8vw - 1px);
+  margin-left: calc(var(--size) - 1px);
   border-left: 1px solid black;
-  width: calc(8vw + 1px)
+  width: calc(var(--size) + 1px);
 }
 .free .space {
-  margin-left: calc(24vw - 1px);
+  margin-left: calc(var(--size) * 2 - 1px);
 }
 .bottom {
   display: flex;
-  width: 98vw;
+  width: calc(var(--size) * 12 + var(--margin));
   position: absolute;
-  bottom: 2vw;
+  bottom: calc(var(--size) * -1);
+  right: 0;
 }
 .free .bottom {
-  width: 82vw;
-  margin-left: 16vw;
+  width: calc(var(--size) * 10);
 }
 .size--small:before {
   content: "";
   display: block;
-  height: 1vw;
-  width: 1vw;
+  height: 20%;
+  width: 20%;
   background-color: black;
   border-radius: 50%;
 }
 .size--medium:before {
   content: "";
   display: block;
-  height: 3vw;
-  width: 3vw;
+  height: 40%;
+  width: 40%;
   background-color: black;
   border-radius: 50%;
 }
 .size--large:before {
   content: "";
   display: block;
-  height: 5vw;
-  width: 5vw;
+  height: 60%;
+  width: 60%;
   background-color: black;
   border-radius: 50%;
 }
 .size--xl:before {
   content: "";
   display: block;
-  height: 7.8vw;
-  width: 7.8vw;
+  height: 90%;
+  width: 90%;
   background-color: black;
   border-radius: 50%;
 }
@@ -471,7 +490,7 @@ function size(size: number) {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 5vw;
+  font-size: 4.8vw;
   text-decoration: underline;
 }
 </style>

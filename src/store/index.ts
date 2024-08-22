@@ -13,6 +13,8 @@ export const debugMessages = ref<string[]>([])
 
 export const countDown = ref(startCountDown)
 export const drauu = ref<Drauu>()
+export const canUndo = ref(false)
+export const canRedo = ref(false)
 export const drawDump = ref<
   Record<string, Record<string, { dump: string; time: number }>>
 >({})

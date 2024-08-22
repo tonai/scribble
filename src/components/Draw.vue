@@ -2,6 +2,8 @@
 import { onMounted, onUnmounted, ref, watch } from "vue"
 import { createDrauu } from "drauu"
 import {
+  canRedo,
+  canUndo,
   clear,
   drauu,
   drawDump,
@@ -99,10 +101,18 @@ function committed(node?: SVGElement) {
   }
 }
 
+function updateState() {
+  if (drauu.value) {
+    canRedo.value = drauu.value.canRedo()
+    canUndo.value = drauu.value.canUndo()
+  }
+}
+
 onMounted(() => {
   if (drauu.value) {
     drauu.value.on("start", start)
     drauu.value.on("committed", committed)
+    drauu.value.on("changed", updateState)
   }
 })
 </script>

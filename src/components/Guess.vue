@@ -43,7 +43,7 @@ function submit(event: Event) {
 
 <style scoped>
 .guess {
-  padding: 1vh 2vw 2vh;
+  padding: 1vh 2vw;
   position: relative;
   background-color: white;
   font-size: 6vw;
@@ -84,12 +84,12 @@ function submit(event: Event) {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 5vw;
-  height: 3vh;
+  padding: 0 1vw;
+  height: 5vh;
   font-size: 6vw;
 }
 .hint {
   letter-spacing: 2px;
-  font-size: 4.6vw;
+  font-size: 4.8vw;
 }
 </style>
