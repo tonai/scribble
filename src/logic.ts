@@ -1,4 +1,4 @@
-import { startCountDown } from "./constants/game"
+import { multiplier, startCountDown } from "./constants/game"
 import { words } from "./constants/words"
 import { getScore } from "./helpers/game"
 import {
@@ -8,7 +8,14 @@ import {
   selectWord,
   startRound,
 } from "./logic/round"
-import { Action, DiffAction, Language, Mode, Step } from "./types/logic"
+import {
+  Action,
+  DiffAction,
+  Language,
+  LanguageWords,
+  Mode,
+  Step,
+} from "./types/logic"
 
 Dusk.initLogic({
   minPlayers: 1,
@@ -18,6 +25,7 @@ Dusk.initLogic({
   setup: (allPlayerIds) => ({
     availableWords: words.en,
     countDown: startCountDown,
+    difficulty: "easy",
     drawingPayer: allPlayerIds[0],
     drawDiff: Object.fromEntries(allPlayerIds.map((id) => [id, []])),
     drawDump: Object.fromEntries(allPlayerIds.map((id) => [id, {}])),
@@ -61,6 +69,9 @@ Dusk.initLogic({
         }
       }
       game.guessWord = word
+      game.difficulty = Object.keys(game.availableWords)[
+        game.words.indexOf(word)
+      ] as keyof LanguageWords
       startRound(game)
     },
     clear(time: number, { game, playerId }) {
@@ -103,7 +114,7 @@ Dusk.initLogic({
       }
       if (word.toLowerCase().trim() === game.guessWord.toLowerCase()) {
         const time = startCountDown * 1000 - (Dusk.gameTime() - game.startTime)
-        const score = getScore(time)
+        const score = Math.round(getScore(time) * multiplier[game.difficulty])
         game.playersGuessed[playerId] = score
         game.scores[playerId] += score
         if (

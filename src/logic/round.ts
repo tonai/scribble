@@ -1,4 +1,9 @@
-import { hintPercentage, rounds, startCountDown } from "../constants/game"
+import {
+  hintPercentage,
+  multiplier,
+  rounds,
+  startCountDown,
+} from "../constants/game"
 import { words } from "../constants/words"
 import { randomInt, unusedRandomInt } from "../helpers/math"
 import { GameState, Language, Mode, Step } from "../types/logic"
@@ -89,7 +94,9 @@ export function endRound(game: GameState) {
     0
   )
   game.rounds[game.drawingPayer]++
-  const score = Math.round(drawerScore / game.playerIds.length)
+  const score = Math.round(
+    (drawerScore / game.playerIds.length) * multiplier[game.difficulty]
+  )
   game.playersGuessed[game.drawingPayer] = score
   game.scores[game.drawingPayer] += score
   game.playersReady = []

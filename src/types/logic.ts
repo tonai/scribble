@@ -39,6 +39,7 @@ export type DiffAction = ClearAction | AddAction | DeleteAction | UpdateAction
 export interface GameState {
   availableWords: LanguageWords
   countDown: number
+  difficulty: keyof LanguageWords
   drawingPayer: PlayerId
   drawDiff: Record<PlayerId, DiffAction[]>
   drawDump: Record<string, Record<string, { dump: string; time: number }>>
