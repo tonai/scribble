@@ -6,7 +6,7 @@ import Avatar from "./Avatar.vue"
 <template>
   <header class="header">
     <ul className="list">
-      <li v-for="id of playerIds" :class="{ you: playerId === id }" :key="id">
+      <li v-for="id of playerIds" :key="id" :class="{ you: playerId === id }">
         <Avatar :id="id" />
       </li>
     </ul>

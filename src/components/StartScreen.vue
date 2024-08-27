@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, type Component } from "vue"
+import { computed, onMounted, type Component } from "vue"
 import logo from "../assets/logo.png"
 import { languages } from "../constants/game"
 import { t } from "../helpers/i18n"
 import {
-lastDump,
-lastNodes,
+  lastDump,
+  lastNodes,
   playerId,
   playerIds,
   playersLanguage,
@@ -52,22 +52,25 @@ const selectedGuessMode = computed(() =>
 )
 
 function selectLanguage(language: Language) {
-  if (!playersByLanguage.value[language] || !playersByLanguage.value[language].includes(playerId.value)) {
-    playSound("note");
+  if (
+    !playersByLanguage.value[language] ||
+    !playersByLanguage.value[language].includes(playerId.value)
+  ) {
+    playSound("note")
   }
   Dusk.actions.language(language)
 }
 
 function mode(mode: Mode, sound: boolean) {
   if (sound) {
-    playSound("on");
+    playSound("on")
   }
   Dusk.actions.mode(mode)
 }
 
 onMounted(() => {
-  lastDump.value = [];
-  lastNodes.value = [];
+  lastDump.value = []
+  lastNodes.value = []
 })
 </script>
 
@@ -86,9 +89,9 @@ onMounted(() => {
       <div class="avatars">
         <Avatar
           v-for="id of playersByLanguage[language]"
+          :id="id"
           :key="id"
           class="avatar"
-          :id="id"
         />
       </div>
     </div>
@@ -102,12 +105,12 @@ onMounted(() => {
         @click="mode(Mode.FREE, !selectedFreeMode.includes(playerId))"
       >
         <span
-          >{{ t("Free mode") }}<br/>({{ selectedFreeMode.length }}/{{
+          >{{ t("Free mode") }}<br />({{ selectedFreeMode.length }}/{{
             playerIds.length
           }})</span
         >
       </button>
-      <div class="min hidden">{{ t('min 2') }}</div>
+      <div class="min hidden">{{ t("min 2") }}</div>
     </div>
     <div class="mode">
       <button
@@ -118,12 +121,12 @@ onMounted(() => {
         @click="mode(Mode.GUESS, !selectedGuessMode.includes(playerId))"
       >
         <span
-          >{{ t("Guess mode") }}<br/>({{ selectedGuessMode.length }}/{{
+          >{{ t("Guess mode") }}<br />({{ selectedGuessMode.length }}/{{
             playerIds.length
           }})</span
         >
       </button>
-      <div class="min">{{ t('min 2') }}</div>
+      <div class="min">{{ t("min 2") }}</div>
     </div>
   </div>
 </template>

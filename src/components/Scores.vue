@@ -20,8 +20,8 @@ onMounted(() => {
     <div class="content">
       <div class="guessWord">{{ guessWord }}</div>
       <table>
-        <tr v-for="(score, playerId) in scores" :key="playerId">
-          <td class="cell"><Avatar :id="playerId" /></td>
+        <tr v-for="(score, id) in scores" :key="id">
+          <td class="cell"><Avatar :id="id" /></td>
           <td class="cell">+{{ score.score ?? 0 }}</td>
           <td class="cell total">{{ score.total }}</td>
         </tr>

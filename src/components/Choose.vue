@@ -10,10 +10,10 @@ function choose(word: string) {
   <div class="dialog choose">
     <button
       v-for="word of words"
+      :key="word"
       class="button"
       type="button"
       @click="choose(word)"
-      :key="word"
     >
       <span>{{ word }}</span>
     </button>

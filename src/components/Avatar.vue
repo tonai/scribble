@@ -24,8 +24,8 @@ const player = computed(() => Dusk.getPlayerInfo(id))
   >
     <img class="image" :src="player.avatarUrl" />
     <span
-      class="drawingPlayer"
       v-if="step !== Step.WAIT && id === drawingPayer && mode === Mode.GUESS"
+      class="drawingPlayer"
       >✏️</span
     >
   </div>

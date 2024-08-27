@@ -53,7 +53,11 @@ onMounted(() => {
       }
       if (playersGuessed.value !== game.playersGuessed) {
         playersGuessed.value = game.playersGuessed
-        if (Object.keys(game.playersGuessed).length > 0 && game.step === Step.PLAY && action?.name === 'guess') {
+        if (
+          Object.keys(game.playersGuessed).length > 0 &&
+          game.step === Step.PLAY &&
+          action?.name === "guess"
+        ) {
           playSound("guess")
         }
       }
@@ -102,7 +106,7 @@ onMounted(() => {
       scores.value = Object.fromEntries(
         Object.entries(game.scores)
           .filter(([id]) => game.playerIds.indexOf(id) !== -1)
-          .sort(([_a, a], [_b, b]) => b - a)
+          .sort(([, a], [, b]) => b - a)
           .map(([id, total]) => [id, { score: game.playersGuessed[id], total }])
       )
       draw(game.drawDiff)

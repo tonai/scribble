@@ -1,17 +1,25 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
-import { countDown, guessWord, hint, mode, playerId, playersGuessed, step } from '../store';
-import { Mode, Step } from '../types/logic';
-import { t } from '../helpers/i18n';
-import CountDown from './CountDown.vue';
+import { computed, ref } from "vue"
+import {
+  countDown,
+  guessWord,
+  hint,
+  mode,
+  playerId,
+  playersGuessed,
+  step,
+} from "../store"
+import { Mode, Step } from "../types/logic"
+import { t } from "../helpers/i18n"
+import CountDown from "./CountDown.vue"
 
-const guess = ref('');
+const guess = ref("")
 
 const hintWord = computed(() => {
   if (playerId.value in playersGuessed.value) {
     return guessWord.value
   }
-  const hintWord = guessWord.value.replaceAll(/[^\s'\.-]/gi, "_").split("")
+  const hintWord = guessWord.value.replaceAll(/[^\s'.-]/gi, "_").split("")
   for (const { index, revealTime } of hint.value) {
     if (countDown.value < revealTime) {
       hintWord[index] = guessWord.value[index]
@@ -21,19 +29,23 @@ const hintWord = computed(() => {
 })
 
 function submit(event: Event) {
-  event.preventDefault();
-  Dusk.actions.guess(guess.value);
-  guess.value = '';
+  event.preventDefault()
+  Dusk.actions.guess(guess.value)
+  guess.value = ""
 }
 </script>
 
 <template>
   <div class="guess">
-    <form v-if="step === Step.PLAY && !(playerId in playersGuessed)" class="form" @submit="submit">
-      <input class="input button" v-model="guess" />
+    <form
+      v-if="step === Step.PLAY && !(playerId in playersGuessed)"
+      class="form"
+      @submit="submit"
+    >
+      <input v-model="guess" class="input button" />
       <input class="submit button" type="submit" :value="t('Guess')" />
     </form>
-    <div v-if="step === Step.CHOOSE">{{ t('Waiting...') }}</div>
+    <div v-if="step === Step.CHOOSE">{{ t("Waiting...") }}</div>
     <div v-if="step === Step.PLAY && mode === Mode.GUESS" class="play">
       <div class="hint">{{ hintWord }}</div>
       <CountDown />
@@ -51,7 +63,7 @@ function submit(event: Event) {
   z-index: 1;
 }
 .guess:after {
-  content: '';
+  content: "";
   position: absolute;
   left: 0;
   right: 0;
@@ -60,7 +72,7 @@ function submit(event: Event) {
   height: 6px;
 }
 .form {
-  display:flex;
+  display: flex;
   align-items: center;
   justify-content: center;
   gap: 2vw;
