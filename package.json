@@ -8,7 +8,8 @@
     "build": "npm run lint && vue-tsc && vite build",
     "upload": "npm run build && npx dusk-cli@latest upload",
     "lint": "eslint src",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "update-info": "npx dusk-cli@latest update-info"
   },
   "dependencies": {
     "drauu": "^0.4.1",

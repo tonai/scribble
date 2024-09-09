@@ -2,12 +2,16 @@
 import { onMounted, onUnmounted, ref, watch } from "vue"
 import { createDrauu } from "drauu"
 import {
+  activeBrush,
+  activeColor,
+  activeSize,
   canRedo,
   canUndo,
   clear,
   drauu,
   drawDump,
   drawingPayer,
+  isDrawing,
   load,
   playerId,
   lastDump,
@@ -16,9 +20,6 @@ import {
   svg,
   step,
   tmp,
-  activeBrush,
-  activeColor,
-  activeSize,
 } from "../store"
 import { getDiff } from "../helpers/draw"
 import { Mode, Step } from "../types/logic"
@@ -82,6 +83,7 @@ watch(step, () => {
 })
 
 function start() {
+  isDrawing.value = true
   setTimeout(() => {
     // @ts-expect-error ignore
     const currentNode = drauu.value?._currentNode
@@ -90,6 +92,10 @@ function start() {
       currentNode.dataset.id = playerId.value
     }
   })
+}
+
+function end() {
+  isDrawing.value = false
 }
 
 function committed(node?: SVGElement) {
@@ -111,6 +117,7 @@ function updateState() {
 onMounted(() => {
   if (drauu.value) {
     drauu.value.on("start", start)
+    drauu.value.on("end", end)
     drauu.value.on("committed", committed)
     drauu.value.on("changed", updateState)
   }

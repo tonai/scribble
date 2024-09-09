@@ -34,6 +34,7 @@ export const selectedModes = ref<Record<string, Mode>>({})
 export const step = ref(Step.WAIT)
 export const words = ref<string[]>([])
 
+export const isDrawing = ref(false)
 export const activeBrush = ref<DrawingMode | "arrow">("draw")
 export const activeColor = ref<string>("#000000")
 export const activeSize = ref<number>(6)

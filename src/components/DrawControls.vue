@@ -1,6 +1,14 @@
 <script setup lang="ts">
 import { DrawingMode } from "drauu"
-import { canRedo, canUndo, clear, drauu, guessWord, mode } from "../store"
+import {
+  canRedo,
+  canUndo,
+  clear,
+  drauu,
+  guessWord,
+  isDrawing,
+  mode,
+} from "../store"
 import { Mode } from "../types/logic"
 import { t } from "../helpers/i18n"
 import { playSound } from "../helpers/sound"
@@ -61,6 +69,7 @@ function size(size: number) {
       ></div>
       <button
         v-if="mode === Mode.FREE"
+        :disabled="isDrawing"
         class="button"
         type="button"
         @click="back"
@@ -70,6 +79,7 @@ function size(size: number) {
     </div>
     <div class="colors">
       <button
+        :disabled="isDrawing"
         class="color top left"
         :class="{ active: activeColor === '#ffffff' }"
         style="background-color: #ffffff"
@@ -78,6 +88,7 @@ function size(size: number) {
         @click="color('#ffffff')"
       ></button>
       <button
+        :disabled="isDrawing"
         class="color top"
         :class="{ active: activeColor === '#ef130b' }"
         style="background-color: #ef130b"
@@ -86,6 +97,7 @@ function size(size: number) {
         @click="color('#ef130b')"
       ></button>
       <button
+        :disabled="isDrawing"
         class="color top"
         :class="{ active: activeColor === '#ff7100' }"
         style="background-color: #ff7100"
@@ -94,6 +106,7 @@ function size(size: number) {
         @click="color('#ff7100')"
       ></button>
       <button
+        :disabled="isDrawing"
         class="color top"
         :class="{ active: activeColor === '#ffe400' }"
         style="background-color: #ffe400"
@@ -102,6 +115,7 @@ function size(size: number) {
         @click="color('#ffe400')"
       ></button>
       <button
+        :disabled="isDrawing"
         class="color top"
         :class="{ active: activeColor === '#00cc00' }"
         style="background-color: #00cc00"
@@ -109,8 +123,8 @@ function size(size: number) {
         title="Green"
         @click="color('#00cc00')"
       ></button>
-
       <button
+        :disabled="isDrawing"
         class="color top"
         :class="{ active: activeColor === '#00b2ff' }"
         style="background-color: #00b2ff"
@@ -119,6 +133,7 @@ function size(size: number) {
         @click="color('#00b2ff')"
       ></button>
       <button
+        :disabled="isDrawing"
         class="color top"
         :class="{ active: activeColor === '#231fd3' }"
         style="background-color: #231fd3"
@@ -127,6 +142,7 @@ function size(size: number) {
         @click="color('#231fd3')"
       ></button>
       <button
+        :disabled="isDrawing"
         class="color top"
         :class="{ active: activeColor === '#a300ba' }"
         style="background-color: #a300ba"
@@ -135,6 +151,7 @@ function size(size: number) {
         @click="color('#a300ba')"
       ></button>
       <button
+        :disabled="isDrawing"
         class="color top"
         :class="{ active: activeColor === '#d37caa' }"
         style="background-color: #d37caa"
@@ -143,6 +160,7 @@ function size(size: number) {
         @click="color('#d37caa')"
       ></button>
       <button
+        :disabled="isDrawing"
         class="color top"
         :class="{ active: activeColor === '#a0522d' }"
         style="background-color: #a0522d"
@@ -152,6 +170,7 @@ function size(size: number) {
       ></button>
 
       <button
+        :disabled="isDrawing"
         class="color left"
         :class="{ active: activeColor === '#000000' }"
         style="background-color: #000000"
@@ -160,6 +179,7 @@ function size(size: number) {
         @click="color('#000000')"
       ></button>
       <button
+        :disabled="isDrawing"
         class="color"
         :class="{ active: activeColor === '#740b07' }"
         style="background-color: #740b07"
@@ -168,6 +188,7 @@ function size(size: number) {
         @click="color('#740b07')"
       ></button>
       <button
+        :disabled="isDrawing"
         class="color"
         :class="{ active: activeColor === '#c23800' }"
         style="background-color: #c23800"
@@ -176,6 +197,7 @@ function size(size: number) {
         @click="color('#c23800')"
       ></button>
       <button
+        :disabled="isDrawing"
         class="color"
         :class="{ active: activeColor === '#e8a200' }"
         style="background-color: #e8a200"
@@ -184,6 +206,7 @@ function size(size: number) {
         @click="color('#e8a200')"
       ></button>
       <button
+        :disabled="isDrawing"
         class="color"
         :class="{ active: activeColor === '#005510' }"
         style="background-color: #005510"
@@ -191,8 +214,8 @@ function size(size: number) {
         title="Dark Green"
         @click="color('#005510')"
       ></button>
-
       <button
+        :disabled="isDrawing"
         class="color"
         :class="{ active: activeColor === '#00569e' }"
         style="background-color: #00569e"
@@ -201,6 +224,7 @@ function size(size: number) {
         @click="color('#00569e')"
       ></button>
       <button
+        :disabled="isDrawing"
         class="color"
         :class="{ active: activeColor === '#0e0865' }"
         style="background-color: #0e0865"
@@ -209,6 +233,7 @@ function size(size: number) {
         @click="color('#0e0865')"
       ></button>
       <button
+        :disabled="isDrawing"
         class="color"
         :class="{ active: activeColor === '#550069' }"
         style="background-color: #550069"
@@ -217,6 +242,7 @@ function size(size: number) {
         @click="color('#550069')"
       ></button>
       <button
+        :disabled="isDrawing"
         class="color"
         :class="{ active: activeColor === '#a75574' }"
         style="background-color: #a75574"
@@ -225,6 +251,7 @@ function size(size: number) {
         @click="color('#a75574')"
       ></button>
       <button
+        :disabled="isDrawing"
         class="color"
         :class="{ active: activeColor === '#63300d' }"
         style="background-color: #63300d"
@@ -234,6 +261,7 @@ function size(size: number) {
       ></button>
 
       <button
+        :disabled="isDrawing"
         class="brush left"
         aria-label="Clear"
         title="Clear"
@@ -242,8 +270,8 @@ function size(size: number) {
         🗑
       </button>
       <button
+        :disabled="isDrawing || !canUndo"
         class="brush"
-        :disabled="!canUndo"
         aria-label="Undo"
         title="Undo"
         @click="undo"
@@ -252,7 +280,7 @@ function size(size: number) {
       </button>
       <button
         v-if="mode !== Mode.FREE"
-        :disabled="!canRedo"
+        :disabled="isDrawing || !canRedo"
         class="brush"
         aria-label="Redo"
         title="Redo"
@@ -262,6 +290,7 @@ function size(size: number) {
       </button>
 
       <button
+        :disabled="isDrawing"
         class="brush space"
         :class="{ active: activeBrush === 'draw' }"
         aria-label="Draw"
@@ -271,6 +300,7 @@ function size(size: number) {
         ✏️
       </button>
       <button
+        :disabled="isDrawing"
         class="brush"
         :class="{ active: activeBrush === 'line' }"
         aria-label="Line"
@@ -280,6 +310,7 @@ function size(size: number) {
         ⁄
       </button>
       <button
+        :disabled="isDrawing"
         class="brush"
         :class="{ active: activeBrush === 'arrow' }"
         aria-label="Arrow"
@@ -289,15 +320,7 @@ function size(size: number) {
         ↗
       </button>
       <button
-        class="brush"
-        :class="{ active: activeBrush === 'eraseLine' }"
-        aria-label="Eraser"
-        title="Eraser"
-        @click="brush('eraseLine')"
-      >
-        🧹
-      </button>
-      <button
+        :disabled="isDrawing"
         class="brush"
         :class="{ active: activeBrush === 'rectangle' }"
         aria-label="Rect"
@@ -307,6 +330,7 @@ function size(size: number) {
         □
       </button>
       <button
+        :disabled="isDrawing"
         class="brush"
         :class="{ active: activeBrush === 'ellipse' }"
         aria-label="Ellipse"
@@ -315,11 +339,22 @@ function size(size: number) {
       >
         ○
       </button>
+      <button
+        :disabled="isDrawing"
+        class="brush"
+        :class="{ active: activeBrush === 'eraseLine' }"
+        aria-label="Eraser"
+        title="Eraser"
+        @click="brush('eraseLine')"
+      >
+        🧹
+      </button>
 
       <div class="bottom">
         <div class="word">{{ guessWord }}</div>
 
         <button
+          :disabled="isDrawing"
           class="size size--small left"
           :class="{ active: activeSize === 2 }"
           aria-label="Small"
@@ -327,6 +362,7 @@ function size(size: number) {
           @click="size(2)"
         ></button>
         <button
+          :disabled="isDrawing"
           class="size size--medium"
           :class="{ active: activeSize === 6 }"
           aria-label="Medium"
@@ -334,6 +370,7 @@ function size(size: number) {
           @click="size(6)"
         ></button>
         <button
+          :disabled="isDrawing"
           class="size size--large"
           :class="{ active: activeSize === 12 }"
           aria-label="Large"
@@ -341,6 +378,7 @@ function size(size: number) {
           @click="size(12)"
         ></button>
         <button
+          :disabled="isDrawing"
           class="size size--xl"
           :class="{ active: activeSize === 40 }"
           aria-label="Extra Large"
@@ -411,6 +449,7 @@ function size(size: number) {
   font-size: inherit;
   background-color: transparent;
   transition: background-color 400ms ease;
+  color: black;
 }
 .active {
   background-color: #00ff00;
