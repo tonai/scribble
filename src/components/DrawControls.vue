@@ -16,7 +16,7 @@ import { activeBrush, activeColor, activeSize } from "../store"
 
 function back() {
   playSound("button")
-  Dusk.actions.back()
+  Rune.actions.back()
 }
 
 function undo() {
@@ -29,7 +29,7 @@ function redo() {
 
 function handleClear() {
   clear()
-  Dusk.actions.clear(Date.now())
+  Rune.actions.clear(Date.now())
 }
 
 function brush(mode: DrawingMode | "arrow") {

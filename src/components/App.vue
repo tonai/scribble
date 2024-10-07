@@ -43,7 +43,7 @@ onMounted(() => {
 })
 
 onMounted(() => {
-  Dusk.initClient({
+  Rune.initClient({
     onChange: ({ action, game, yourPlayerId }) => {
       if (yourPlayerId && playerId.value !== yourPlayerId) {
         playerId.value = yourPlayerId

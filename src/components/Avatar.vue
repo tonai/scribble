@@ -7,7 +7,7 @@ const { id } = defineProps<{
   id: string
 }>()
 
-const player = computed(() => Dusk.getPlayerInfo(id))
+const player = computed(() => Rune.getPlayerInfo(id))
 </script>
 
 <template>

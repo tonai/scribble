@@ -1,4 +1,4 @@
-import { DuskClient, PlayerId } from "dusk-games-sdk"
+import { RuneClient, PlayerId } from "rune-sdk"
 
 export enum Mode {
   FREE = "free",
@@ -72,5 +72,5 @@ export type GameActions = {
 }
 
 declare global {
-  const Dusk: DuskClient<GameState, GameActions>
+  const Rune: RuneClient<GameState, GameActions>
 }

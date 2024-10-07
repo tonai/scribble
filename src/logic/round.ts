@@ -69,7 +69,7 @@ export function selectWord(game: GameState) {
 
 export function startRound(game: GameState) {
   game.step = Step.PLAY
-  game.startTime = Dusk.gameTime()
+  game.startTime = Rune.gameTime()
   // Pre-calculate hints over time
   const hintWord = game.guessWord.replaceAll(/[^\s'.-]/gi, "_")
   const matches = [...hintWord.matchAll(/_/g)]
@@ -105,7 +105,7 @@ export function endRound(game: GameState) {
     game.playerIds.length === 1
   ) {
     game.gameOver = true
-    Dusk.gameOver({
+    Rune.gameOver({
       players: game.scores,
       minimizePopUp: true,
     })

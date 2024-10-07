@@ -17,7 +17,7 @@ import {
   Step,
 } from "./types/logic"
 
-Dusk.initLogic({
+Rune.initLogic({
   minPlayers: 1,
   maxPlayers: 6,
   reactive: true,
@@ -48,7 +48,7 @@ Dusk.initLogic({
   actions: {
     back(_, { game }) {
       if (game.mode !== Mode.FREE) {
-        return Dusk.invalidAction()
+        return Rune.invalidAction()
       }
       game.selectedModes = {}
       game.step = Step.WAIT
@@ -59,7 +59,7 @@ Dusk.initLogic({
         playerId !== game.drawingPayer ||
         game.words.indexOf(word) === -1
       ) {
-        return Dusk.invalidAction()
+        return Rune.invalidAction()
       }
       // Remove the chosen word from the list to have it multiple times
       for (const list of Object.values(game.availableWords)) {
@@ -79,7 +79,7 @@ Dusk.initLogic({
         game.step !== Step.PLAY ||
         (playerId !== game.drawingPayer && game.mode === Mode.GUESS)
       ) {
-        return Dusk.invalidAction()
+        return Rune.invalidAction()
       }
       game.drawDiff = Object.fromEntries(game.playerIds.map((id) => [id, []]))
       game.drawDump = Object.fromEntries(game.playerIds.map((id) => [id, {}]))
@@ -90,7 +90,7 @@ Dusk.initLogic({
         game.step !== Step.PLAY ||
         (playerId !== game.drawingPayer && game.mode === Mode.GUESS)
       ) {
-        return Dusk.invalidAction()
+        return Rune.invalidAction()
       }
       game.drawDiff[playerId] = diffs
       for (const [time, action, timeId, id, dump] of diffs) {
@@ -110,10 +110,10 @@ Dusk.initLogic({
     },
     guess(word: string, { game, playerId }) {
       if (game.step !== Step.PLAY || playerId in game.playersGuessed) {
-        return Dusk.invalidAction()
+        return Rune.invalidAction()
       }
       if (word.toLowerCase().trim() === game.guessWord.toLowerCase()) {
-        const time = startCountDown * 1000 - (Dusk.gameTime() - game.startTime)
+        const time = startCountDown * 1000 - (Rune.gameTime() - game.startTime)
         const score = Math.round(getScore(time) * multiplier[game.difficulty])
         game.playersGuessed[playerId] = score
         game.scores[playerId] += score
@@ -127,7 +127,7 @@ Dusk.initLogic({
     },
     language(language: Language, { game, playerId }) {
       if (game.step !== Step.WAIT) {
-        return Dusk.invalidAction()
+        return Rune.invalidAction()
       }
       const index = game.playersLanguage.findIndex(({ id }) => id === playerId)
       // Skip if same language selected
@@ -142,7 +142,7 @@ Dusk.initLogic({
     },
     mode(mode, { game, playerId }) {
       if (game.step !== Step.WAIT) {
-        return Dusk.invalidAction()
+        return Rune.invalidAction()
       }
       game.selectedModes[playerId] = mode
       if (Object.keys(game.selectedModes).length === game.playerIds.length) {
@@ -151,7 +151,7 @@ Dusk.initLogic({
     },
     ready(_, { game, playerId }) {
       if (game.step !== Step.SCORES) {
-        return Dusk.invalidAction()
+        return Rune.invalidAction()
       }
       const index = game.playersReady.indexOf(playerId)
       if (index !== -1) {
@@ -196,7 +196,7 @@ Dusk.initLogic({
   update({ game }) {
     if (game.step === Step.PLAY && game.mode === Mode.GUESS) {
       const countDown =
-        (startCountDown * 1000 - (Dusk.gameTime() - game.startTime)) / 1000
+        (startCountDown * 1000 - (Rune.gameTime() - game.startTime)) / 1000
       if (countDown <= 0) {
         endRound(game)
       }

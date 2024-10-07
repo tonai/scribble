@@ -58,14 +58,14 @@ function selectLanguage(language: Language) {
   ) {
     playSound("note")
   }
-  Dusk.actions.language(language)
+  Rune.actions.language(language)
 }
 
 function mode(mode: Mode, sound: boolean) {
   if (sound) {
     playSound("on")
   }
-  Dusk.actions.mode(mode)
+  Rune.actions.mode(mode)
 }
 
 onMounted(() => {

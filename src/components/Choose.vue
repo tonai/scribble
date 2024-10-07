@@ -2,7 +2,7 @@
 import { words } from "../store"
 
 function choose(word: string) {
-  Dusk.actions.choose(word)
+  Rune.actions.choose(word)
 }
 </script>
 

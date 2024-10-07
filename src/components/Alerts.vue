@@ -8,7 +8,7 @@ const alerts = computed(() =>
     Object.keys(playersGuessed.value)
       .filter((id) => id !== drawingPayer.value)
       .map((id) => {
-        const player = Dusk.getPlayerInfo(id)
+        const player = Rune.getPlayerInfo(id)
         return `${player.displayName} ${t("guessed the word")}`
       })
   )

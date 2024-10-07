@@ -7,7 +7,7 @@ import Avatar from "./Avatar.vue"
 
 function ready(on?: boolean) {
   playSound(on ? "on" : "off")
-  Dusk.actions.ready()
+  Rune.actions.ready()
 }
 
 onMounted(() => {

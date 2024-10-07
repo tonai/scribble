@@ -30,7 +30,7 @@ const hintWord = computed(() => {
 
 function submit(event: Event) {
   event.preventDefault()
-  Dusk.actions.guess(guess.value)
+  Rune.actions.guess(guess.value)
   guess.value = ""
 }
 </script>

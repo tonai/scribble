@@ -64,7 +64,7 @@ onMounted(() => {
       const dump = nodes.map((node) => node.outerHTML)
       const diff = getDiff(lastNodes.value, nodes, lastDump.value, dump)
       if (diff.length > 0) {
-        Dusk.actions.draw(diff)
+        Rune.actions.draw(diff)
       }
       lastNodes.value = nodes
       lastDump.value = dump
