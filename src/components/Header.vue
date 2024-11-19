@@ -1,11 +1,32 @@
 <script setup lang="ts">
-import { playerId, playerIds } from "../store"
+import { isDrawing, mode, playerId, playerIds } from "../store"
+
+import { Mode } from "../types/logic"
+import { t } from "../helpers/i18n"
+import { playSound } from "../helpers/sound"
+
 import Avatar from "./Avatar.vue"
+
+function back() {
+  playSound("button")
+  Rune.actions.back()
+}
 </script>
 
 <template>
   <header class="header">
     <ul className="list">
+      <li class="item">
+        <button
+          v-if="mode === Mode.FREE"
+          :disabled="isDrawing"
+          class="button"
+          type="button"
+          @click="back"
+        >
+          <span>{{ t("Back") }}</span>
+        </button>
+      </li>
       <li v-for="id of playerIds" :key="id" :class="{ you: playerId === id }">
         <Avatar :id="id" />
       </li>
@@ -34,10 +55,15 @@ import Avatar from "./Avatar.vue"
 }
 .list {
   list-style-type: none;
-  padding: 0;
+  padding: 0 2vw;
   margin: 0;
   display: flex;
   justify-content: center;
   gap: 3vw;
+}
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>

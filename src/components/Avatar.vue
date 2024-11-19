@@ -2,6 +2,7 @@
 import { computed } from "vue"
 import { drawingPayer, mode, playersGuessed, step } from "../store"
 import { Mode, Step } from "../types/logic"
+import Pen from "./icon/Pen.vue";
 
 const { id } = defineProps<{
   id: string
@@ -26,7 +27,9 @@ const player = computed(() => Rune.getPlayerInfo(id))
     <span
       v-if="step !== Step.WAIT && id === drawingPayer && mode === Mode.GUESS"
       class="drawingPlayer"
-      >✏️</span
+      >
+        <Pen/>
+      </span
     >
   </div>
 </template>
@@ -54,8 +57,19 @@ const player = computed(() => Rune.getPlayerInfo(id))
 }
 .drawingPlayer {
   position: absolute;
-  top: -1vw;
-  right: -1vw;
-  font-size: 6vw;
+  top: -2vw;
+  right: -2vw;
+  font-size: 3vw;
+  width: 6vw;
+  height: 6vw;
+  border-radius: 3vw;
+  background-color: var(--selected-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.drawingPlayer svg {
+  width: 1em;
 }
 </style>

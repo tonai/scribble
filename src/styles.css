@@ -1,3 +1,6 @@
+:root {
+  --selected-color: #75FB4C;
+}
 body {
   margin: 0;
   height: 100vh;
