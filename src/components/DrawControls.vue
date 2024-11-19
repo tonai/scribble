@@ -12,8 +12,6 @@ import {
   isDrawing,
 } from "../store"
 
-import { playSound } from "../helpers/sound"
-
 import Arrow from "./icon/Arrow.vue"
 import Circle from "./icon/Circle.vue"
 import Clear from "./icon/Clear.vue"

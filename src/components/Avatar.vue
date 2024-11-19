@@ -2,7 +2,7 @@
 import { computed } from "vue"
 import { drawingPayer, mode, playersGuessed, step } from "../store"
 import { Mode, Step } from "../types/logic"
-import Pen from "./icon/Pen.vue";
+import Pen from "./icon/Pen.vue"
 
 const { id } = defineProps<{
   id: string
@@ -27,10 +27,9 @@ const player = computed(() => Rune.getPlayerInfo(id))
     <span
       v-if="step !== Step.WAIT && id === drawingPayer && mode === Mode.GUESS"
       class="drawingPlayer"
-      >
-        <Pen/>
-      </span
     >
+      <Pen />
+    </span>
   </div>
 </template>
 
