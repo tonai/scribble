@@ -1,3 +1,4 @@
+import { generateId } from "@tonai/game-utils/server"
 import { multiplier, startCountDown } from "./constants/game"
 import { words } from "./constants/words"
 import { getScore } from "./helpers/game"
@@ -20,6 +21,7 @@ import {
 Rune.initLogic({
   minPlayers: 1,
   maxPlayers: 6,
+  persistPlayerData: true,
   reactive: true,
   updatesPerSecond: 10,
   setup: (allPlayerIds) => ({
@@ -32,6 +34,7 @@ Rune.initLogic({
     gameOver: false,
     guessWord: "",
     hint: [],
+    id: generateId(),
     language: null,
     mode: Mode.GUESS,
     playerIds: allPlayerIds,
@@ -168,6 +171,12 @@ Rune.initLogic({
     playerJoined(playerId, { game }) {
       game.playerIds.push(playerId)
       game.scores[playerId] = game.scores[playerId] ?? 0
+      if (
+        game.persisted[playerId].gameId === game.id &&
+        game.persisted[playerId].score
+      ) {
+        game.scores[playerId] = game.persisted[playerId].score
+      }
       game.rounds[playerId] = Math.min(...Object.values(game.rounds))
       game.drawDiff[playerId] = []
       game.drawDump[playerId] = {}
@@ -185,6 +194,8 @@ Rune.initLogic({
         game.playersLanguage.splice(languageIndex, 1)
       }
       if (game.mode === Mode.GUESS) {
+        game.persisted[playerId].gameId = game.id
+        game.persisted[playerId].score = game.scores[playerId]
         if (game.step === Step.CHOOSE && playerId === game.drawingPayer) {
           selectWord(game)
         } else if (game.step === Step.PLAY && playerId === game.drawingPayer) {

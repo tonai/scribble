@@ -46,6 +46,7 @@ export interface GameState {
   gameOver: boolean
   guessWord: string
   hint: { index: number; revealTime: number }[]
+  id: string
   language: Language | null
   mode: Mode
   playerIds: PlayerId[]
@@ -71,6 +72,11 @@ export type GameActions = {
   ready: () => void
 }
 
+export type Persisted = {
+  gameId?: string
+  score?: number
+}
+
 declare global {
-  const Rune: RuneClient<GameState, GameActions>
+  const Rune: RuneClient<GameState, GameActions, Persisted>
 }

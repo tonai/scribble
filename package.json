@@ -13,9 +13,10 @@
     "list": "npx rune-games-cli@latest list"
   },
   "dependencies": {
+    "@tonai/game-utils": "^0.3.0",
     "drauu": "^0.4.2",
-    "vue": "^3.5.13",
-    "rune-sdk": "^4.25.3"
+    "rune-sdk": "^4.25.3",
+    "vue": "^3.5.13"
   },
   "devDependencies": {
     "@eslint/js": "^9.15.0",
