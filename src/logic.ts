@@ -170,19 +170,26 @@ Rune.initLogic({
   events: {
     playerJoined(playerId, { game }) {
       game.playerIds.push(playerId)
-      game.scores[playerId] = game.scores[playerId] ?? 0
+      game.scores[playerId] = 0
       if (
         game.persisted[playerId].gameId === game.id &&
         game.persisted[playerId].score
       ) {
         game.scores[playerId] = game.persisted[playerId].score
       }
-      game.rounds[playerId] = Math.min(...Object.values(game.rounds))
+      const playerRounds = Object.fromEntries(
+        Object.entries(game.rounds).filter(([id]) =>
+          game.playerIds.includes(id)
+        )
+      )
+      game.rounds[playerId] = Math.min(...Object.values(playerRounds))
       game.drawDiff[playerId] = []
       game.drawDump[playerId] = {}
     },
     playerLeft(playerId, { game }) {
       game.playerIds.splice(game.playerIds.indexOf(playerId), 1)
+      delete game.scores[playerId]
+      delete game.rounds[playerId]
       const readyIndex = game.playersReady.indexOf(playerId)
       if (readyIndex > -1) {
         game.playersReady.splice(readyIndex, 1)
