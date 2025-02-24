@@ -100,13 +100,21 @@ export function endRound(game: GameState) {
   game.playersGuessed[game.drawingPayer] = score
   game.scores[game.drawingPayer] += score
   game.playersReady = []
+  const playerRounds = Object.fromEntries(
+    Object.entries(game.rounds).filter(([id]) => game.playerIds.includes(id))
+  )
   if (
-    !Object.values(game.rounds).some((playedRounds) => playedRounds < rounds) ||
+    !Object.values(playerRounds).some(
+      (playedRounds) => playedRounds < rounds
+    ) ||
     game.playerIds.length === 1
   ) {
     game.gameOver = true
+    const scores = Object.fromEntries(
+      Object.entries(game.scores).filter(([id]) => game.playerIds.includes(id))
+    )
     Rune.gameOver({
-      players: game.scores,
+      players: scores,
       minimizePopUp: true,
     })
   }
