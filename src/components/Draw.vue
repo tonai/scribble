@@ -24,7 +24,8 @@ import {
 import { getDiff } from "../helpers/draw"
 import { Mode, Step } from "../types/logic"
 
-const interval = ref<number>()
+// eslint-disable-next-line no-undef
+const interval = ref<NodeJS.Timeout>()
 
 onMounted(() => {
   const drauuInstance = createDrauu({
